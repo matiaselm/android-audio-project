@@ -21,6 +21,10 @@ class MainActivity : AppCompatActivity() {
 
         //Observe the result as livedata (access data with -it-)
         viewModel.results.observe(this, {Log.d("stuff", it.toString())})
-//.observe(this, {userlist.adapter = UserRecyclerAdapter(it?.sortedBy { that -> that.lastname }, this)})
+        //.observe(this, {userlist.adapter = UserRecyclerAdapter(it?.sortedBy { that -> that.lastname }, this)})
+
+        //TODO make a textfield and a button to search for different data
+        //TODO display the livedata in a recyclerview below
+        //TODO Polish your bolete or something
     }
 }
