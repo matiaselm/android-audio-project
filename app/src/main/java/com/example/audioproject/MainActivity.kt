@@ -13,8 +13,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.results.observe(this, {Log.d("stuff", it.toString())})
         viewModel.queryWithText("piano")
+        viewModel.results
+        viewModel.results.observe(this, {Log.d("stuff", it.toString())})
 
     }
 }

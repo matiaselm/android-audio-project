@@ -1,5 +1,6 @@
 package com.example.audioproject
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -57,7 +58,7 @@ object DemoApi {
 class WebServiceRepository(){
 
     private val call = DemoApi.service
-    suspend fun getSounds(query: String){ call.getSounds(query, DemoApi.token) }
+    suspend fun getSounds(query: String): DemoApi.Model.Search{return call.getSounds(query, DemoApi.token) }
 }
 
 class MainViewModel: ViewModel() {
@@ -66,6 +67,7 @@ class MainViewModel: ViewModel() {
     fun queryWithText(text: String) {query.value = text
     }
     val results = query.switchMap {
-        liveData(Dispatchers.IO) {emit(repository.getSounds(it))}
+        liveData(Dispatchers.IO) {
+            emit(repository.getSounds(it))}
     }
 }
