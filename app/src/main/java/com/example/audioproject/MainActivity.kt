@@ -3,6 +3,7 @@ package com.example.audioproject
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.lifecycle.ViewModelProvider
 
@@ -14,8 +15,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.queryWithText("piano")
-        viewModel.results
-        viewModel.results.observe(this, {Log.d("stuff", it.toString())})
 
+        viewModel.results.observe(this, {Log.d("stuff", it.toString())})
+//.observe(this, {userlist.adapter = UserRecyclerAdapter(it?.sortedBy { that -> that.lastname }, this)})
     }
 }
