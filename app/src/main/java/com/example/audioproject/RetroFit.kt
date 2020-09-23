@@ -1,4 +1,4 @@
-package com.example.audioproject
+  package com.example.audioproject
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -12,9 +12,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.io.IOException
 
 
-object DemoApi {
+  object DemoApi {
 
     private const val URL = "https://freesound.org/"
     //token is from registering in freesound.org
@@ -67,9 +68,13 @@ object DemoApi {
 class WebServiceRepository(){
     private val call = DemoApi.service
     //call this to start a GET request in mainactivity, takes in a search word and the api key token is constant
-    suspend fun getSounds(query: String): DemoApi.Model.Search {
-        return call.getSounds(query, DemoApi.token)
-
+    suspend fun getSounds(query: String): DemoApi.Model.Search? {
+        return try{
+            call.getSounds(query, DemoApi.token)
+        } catch(e: IOException){
+            Log.d("sound-lab","$e")
+            null
+        }
     }
 }
 

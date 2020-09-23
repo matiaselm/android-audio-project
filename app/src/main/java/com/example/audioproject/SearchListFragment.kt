@@ -36,7 +36,7 @@ class SearchListFragment : Fragment() {
 
 
         //Observe the result as livedata (access data with -it-)
-        viewModel.results.observe(this, {recycler.adapter = SearchRecyclerAdapter(it.results)})
+        viewModel.results.observe(this, { recycler.adapter = SearchRecyclerAdapter(it!!.results) })
         setAdapter()
 
         searchButton.setOnClickListener() {
@@ -66,35 +66,34 @@ class SearchListFragment : Fragment() {
     }
 
 
+    internal inner class SearchRecyclerAdapter(private val results: List<DemoApi.Model.Result>?) :
+        RecyclerView.Adapter<SearchRecyclerAdapter.SearchViewHolder>() {
 
-internal inner class SearchRecyclerAdapter(private val results: List<DemoApi.Model.Result>?) : RecyclerView.Adapter<SearchRecyclerAdapter.SearchViewHolder>() {
+        internal inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            private val name: TextView = view.result_name
+            private val username: TextView = view.result_username
 
-    internal inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val name: TextView = view.result_name
-        private val username: TextView = view.result_username
+            fun initialize(result: DemoApi.Model.Result) {
+                name.text = result.name
+                username.text = result.username
+            }
 
-        fun initialize(result: DemoApi.Model.Result){
-            name.text = result.name
-            username.text = result.username
         }
 
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.recycler_item_search, parent, false)
+            return SearchViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+            val result = results!![position]
+            holder.initialize(result)
+
+        }
+
+        override fun getItemCount() = results!!.count()
     }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_item_search, parent, false)
-        return SearchViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        val result = results!![position]
-        holder.initialize(result)
-
-    }
-
-    override fun getItemCount() = results!!.count()
-
-}
 }
 
 //TODO implement the onclick on each item

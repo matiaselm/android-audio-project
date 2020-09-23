@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Audio Project</string>
+
+    <string name="search_button">search</string>
+
+    <string name="add_button">add</string>
+    <string name="play_button">play</string>
+
+    <string name="placeholder">placeholder</string>
 </resources>
