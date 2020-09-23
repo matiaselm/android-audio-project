@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,11 +14,13 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_search_list.*
+import kotlinx.android.synthetic.main.recycler_item_search.*
 import kotlinx.android.synthetic.main.recycler_item_search.view.*
 
 class SearchListFragment : Fragment() {
     lateinit var viewModel: MainViewModel
     private lateinit var viewManager: LinearLayoutManager
+    private lateinit var listener: OnResultSelected
 
     companion object {
         fun newInstance() = SearchListFragment()
@@ -25,6 +28,9 @@ class SearchListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        if(context is OnResultSelected) {
+            listener = context
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -36,7 +42,7 @@ class SearchListFragment : Fragment() {
 
 
         //Observe the result as livedata (access data with -it-)
-        viewModel.results.observe(this, { recycler.adapter = SearchRecyclerAdapter(it!!.results) })
+        viewModel.results.observe(this, { recycler.adapter = SearchRecyclerAdapter(it!!.results, listener) })
         setAdapter()
 
         searchButton.setOnClickListener() {
@@ -66,16 +72,26 @@ class SearchListFragment : Fragment() {
     }
 
 
-    internal inner class SearchRecyclerAdapter(private val results: List<DemoApi.Model.Result>?) :
+    internal inner class SearchRecyclerAdapter(private val results: List<DemoApi.Model.Result>?, private var clickListener: OnResultSelected) :
         RecyclerView.Adapter<SearchRecyclerAdapter.SearchViewHolder>() {
 
         internal inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             private val name: TextView = view.result_name
             private val username: TextView = view.result_username
+            private val addButton: Button = view.addButton
+            private val playButton: Button = view.playButton
 
-            fun initialize(result: DemoApi.Model.Result) {
+            fun initialize(result: DemoApi.Model.Result, action: OnResultSelected) {
                 name.text = result.name
                 username.text = result.username
+
+                addButton.setOnClickListener() {
+                    action.onClickResult(result, adapterPosition)
+                }
+                playButton.setOnClickListener() {
+                    action.onClickPlay(result, adapterPosition)
+                }
+
             }
 
         }
@@ -88,7 +104,7 @@ class SearchListFragment : Fragment() {
 
         override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
             val result = results!![position]
-            holder.initialize(result)
+            holder.initialize(result, listener)
 
         }
 
@@ -98,5 +114,6 @@ class SearchListFragment : Fragment() {
 
 //TODO implement the onclick on each item
 interface OnResultSelected {
-    fun onResultSelected(result: DemoApi.Model.Result, position: Int)
+    fun onClickResult(result: DemoApi.Model.Result, position: Int)
+    fun onClickPlay(result: DemoApi.Model.Result, position: Int)
 }

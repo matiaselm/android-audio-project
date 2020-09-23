@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.lifecycle.ViewModelProvider
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnResultSelected {
     lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,5 +23,13 @@ class MainActivity : AppCompatActivity() {
 
         //TODO Polish your bolete or something
         //TODO alot of stuff really.
+    }
+
+    override fun onClickResult(result: DemoApi.Model.Result, position: Int) {
+        Log.d("onClick", result.id.toString() + "add")
+    }
+
+    override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
+        Log.d("onClick", result.id.toString() + "play")
     }
 }
