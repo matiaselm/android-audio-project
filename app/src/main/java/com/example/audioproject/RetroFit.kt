@@ -39,6 +39,8 @@ object DemoApi {
     }
     interface Service {
         //get api call with text search, might have to change this
+
+        //TODO limit search results
         @GET("apiv2/search/text/")
         suspend fun getSounds(@Query("query") query: String,
                               @Query("token") token: String
@@ -67,6 +69,7 @@ class WebServiceRepository(){
     //call this to start a GET request in mainactivity, takes in a search word and the api key token is constant
     suspend fun getSounds(query: String): DemoApi.Model.Search {
         return call.getSounds(query, DemoApi.token)
+
     }
 }
 

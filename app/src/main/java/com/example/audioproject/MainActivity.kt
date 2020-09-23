@@ -13,18 +13,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //get viewmodel
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        //use viewmodels queryWithText to start a HTTP GET request
-        viewModel.queryWithText("piano")
+        if(savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, SearchListFragment.newInstance())
+                .commit()
+        }
 
-        //Observe the result as livedata (access data with -it-)
-        viewModel.results.observe(this, {Log.d("stuff", it.toString())})
-        //.observe(this, {userlist.adapter = UserRecyclerAdapter(it?.sortedBy { that -> that.lastname }, this)})
-
-        //TODO make a textfield and a button to search for different data
-        //TODO display the livedata in a recyclerview below
         //TODO Polish your bolete or something
+        //TODO alot of stuff really.
     }
 }
