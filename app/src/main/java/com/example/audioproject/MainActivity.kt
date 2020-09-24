@@ -84,6 +84,6 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
     @ExperimentalCoroutinesApi
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
         Log.d(TAG, result.id.toString() + "play")
-        // getSound(result.id) // This is the thing that adds functionality to play selected sound
+        // getSound(result.id) // This is the thing that is supposed to add functionality to play selected sound
     }
 }

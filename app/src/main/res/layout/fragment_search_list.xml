@@ -15,18 +15,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchField"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="9" />
+            android:layout_weight="9"
+            android:layout_margin="4dp"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/search_button" />
+            android:text="@string/search_button"
+            android:layout_margin="4dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -40,4 +42,3 @@
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--Delete missing constraints ignore -->
