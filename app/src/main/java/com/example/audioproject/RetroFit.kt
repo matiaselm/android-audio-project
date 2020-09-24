@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 import java.io.IOException
@@ -44,7 +45,8 @@ object DemoApi {
             val name: String,
             val username: String,
             val url: URL,
-            val tags: List<String>
+            val tags: List<String>,
+            val previews: List<URL>
         )
     }
 
@@ -58,8 +60,9 @@ object DemoApi {
             @Query("token") token: String
         ): Model.Search
 
+        @GET("apiv2/sounds/{Id}")
         suspend fun getSound(
-            @Query("query") query: String,
+            @Path("Id") query: String,
             @Query("token") token: String
         ): Model.Sound
     }

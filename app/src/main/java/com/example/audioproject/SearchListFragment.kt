@@ -28,42 +28,6 @@ class SearchListFragment : Fragment() {
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var listener: OnResultSelected
 
-    @ExperimentalCoroutinesApi
-    private fun getSound(id: Int) {
-        val repository = WebServiceRepository()
-        var result: DemoApi.Model.Sound? = null
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            result = repository.getSound(id.toString())
-
-            if (result != null) {
-                val soundUrl: URL = result!!.url
-                val play = async(Dispatchers.IO){
-                    playAudio(soundUrl, result!!.name)
-                }
-
-                play.await()
-            }
-        }
-
-
-    }
-
-
-    private fun playAudio(track: URL, audioName: String) {
-        val mediaPlayer1: MediaPlayer? = MediaPlayer().apply {
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-            setOnCompletionListener { }
-            setDataSource(track.toString())
-            prepare()
-            start()
-        }
-    }
 
 
     companion object {
@@ -140,7 +104,6 @@ class SearchListFragment : Fragment() {
                 }
                 playButton.setOnClickListener() {
                     action.onClickPlay(result, adapterPosition)
-                    getSound(result.id)
                 }
 
             }
