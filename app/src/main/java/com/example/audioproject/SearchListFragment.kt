@@ -42,16 +42,24 @@ class SearchListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //get viewmodel
+        // get viewmodel
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        //use viewmodels queryWithText to start a HTTP GET request
+        // use viewmodels queryWithText to start a HTTP GET request
+        // Observe the result as livedata (access data with -it-)
+        viewModel.results.observe(this, {
+            if(it!=null){
+                recycler.adapter = SearchRecyclerAdapter(it.results, listener)
+            } else {
+                val results = ArrayList<DemoApi.Model.Result>()
+                val tags = ArrayList<String>()
+                tags.add("couldn't connect")
+                results.add(DemoApi.Model.Result(0,"none","couldn't connect to service",tags,"Server down"))
+                recycler.adapter = SearchRecyclerAdapter(results, listener)
+            }
 
+        })
 
-        //Observe the result as livedata (access data with -it-)
-        viewModel.results.observe(
-            this,
-            { recycler.adapter = SearchRecyclerAdapter(it!!.results, listener) })
         setAdapter()
 
         searchButton.setOnClickListener() {
@@ -80,12 +88,10 @@ class SearchListFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_search_list, container, false)
     }
 
-
     internal inner class SearchRecyclerAdapter(
         private val results: List<DemoApi.Model.Result>?,
         private var clickListener: OnResultSelected
-    ) :
-        RecyclerView.Adapter<SearchRecyclerAdapter.SearchViewHolder>() {
+    ) : RecyclerView.Adapter<SearchRecyclerAdapter.SearchViewHolder>() {
 
         internal inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             private val name: TextView = view.result_name
@@ -104,9 +110,7 @@ class SearchListFragment : Fragment() {
                 playButton.setOnClickListener() {
                     action.onClickPlay(result, adapterPosition)
                 }
-
             }
-
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
@@ -115,10 +119,10 @@ class SearchListFragment : Fragment() {
             return SearchViewHolder(view)
         }
 
+        @ExperimentalCoroutinesApi
         override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
             val result = results!![position]
             holder.initialize(result, listener)
-
         }
 
         override fun getItemCount() = results!!.count()

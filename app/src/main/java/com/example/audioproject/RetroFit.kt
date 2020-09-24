@@ -62,7 +62,7 @@ object DemoApi {
 
         @GET("apiv2/sounds/{Id}")
         suspend fun getSound(
-            @Path("Id") query: String,
+            @Path("Id") id: String,
             @Query("token") token: String
         ): Model.Sound
     }
@@ -88,7 +88,8 @@ object DemoApi {
 
 class WebServiceRepository() {
     private val call = DemoApi.service
-    // call this to start a GET request in mainactivity, takes in a search word and the api key token is constant
+
+    // call this to start a GET request in mainactivity, takes in a search word, the api key token is constant
     suspend fun getSounds(query: String): DemoApi.Model.Search? {
         return try {
             call.getSounds(query, DemoApi.token)
@@ -98,6 +99,7 @@ class WebServiceRepository() {
         }
     }
 
+    // call this to start a GET request in mainactivity, takes in id of sound
     suspend fun getSound(id: String): DemoApi.Model.Sound? {
         return try {
             call.getSound(id, DemoApi.token)
