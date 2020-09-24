@@ -29,7 +29,6 @@ class SearchListFragment : Fragment() {
     private lateinit var listener: OnResultSelected
 
 
-
     companion object {
         fun newInstance() = SearchListFragment()
     }

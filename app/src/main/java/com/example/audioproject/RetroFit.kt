@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
+import com.example.audioproject.Tag.TAG
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,7 +20,6 @@ import java.net.URL
 
 object DemoApi {
     private const val URL = "https://freesound.org/"
-
     //token is from registering in freesound.org
     const val token = "TwC9eGABRWKuCNfmh7L0fd0mZbJSX0TlnXTu1NzX"
 
@@ -77,7 +77,7 @@ object DemoApi {
         .addInterceptor(loggingInterceptor)
         .build()
 
-    //Http client put to retrofit builder as client
+    // Http client put to retrofit builder as client
     private val retrofit = Retrofit.Builder()
         .baseUrl(URL)
         .addConverterFactory(GsonConverterFactory.create())
@@ -88,22 +88,21 @@ object DemoApi {
 
 class WebServiceRepository() {
     private val call = DemoApi.service
-
     // call this to start a GET request in mainactivity, takes in a search word and the api key token is constant
     suspend fun getSounds(query: String): DemoApi.Model.Search? {
         return try {
             call.getSounds(query, DemoApi.token)
         } catch (e: IOException) {
-            Log.d("sound-lab", "$e")
+            Log.d(TAG, "$e")
             null
         }
     }
 
-    suspend fun getSound(query: String): DemoApi.Model.Sound? {
+    suspend fun getSound(id: String): DemoApi.Model.Sound? {
         return try {
-            call.getSound(query, DemoApi.token)
+            call.getSound(id, DemoApi.token)
         }catch(e: IOException){
-            Log.d("sound-lab","$e")
+            Log.d(TAG,"$e")
             null
         }
     }

@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.audioproject.Tag.TAG
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.lifecycle.ViewModelProvider
@@ -17,8 +18,6 @@ import java.net.URL
 
 class MainActivity : AppCompatActivity(), OnResultSelected {
     lateinit var viewModel: MainViewModel
-
-    val TAG = "sound-app"
 
     @ExperimentalCoroutinesApi
     private fun getSound(id: Int) {
