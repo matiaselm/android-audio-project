@@ -1,6 +1,8 @@
 package com.example.audioproject
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,19 +10,61 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_search_list.*
-import kotlinx.android.synthetic.main.recycler_item_search.*
 import kotlinx.android.synthetic.main.recycler_item_search.view.*
+import kotlinx.coroutines.*
+import retrofit2.http.Url
+import java.net.URL
 
 class SearchListFragment : Fragment() {
     lateinit var viewModel: MainViewModel
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var listener: OnResultSelected
+
+    @ExperimentalCoroutinesApi
+    private fun getSound(id: Int) {
+        val repository = WebServiceRepository()
+        var result: DemoApi.Model.Sound? = null
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            result = repository.getSound(id.toString())
+
+            if (result != null) {
+                val soundUrl: URL = result!!.url
+                val play = async(Dispatchers.IO){
+                    playAudio(soundUrl, result!!.name)
+                }
+
+                play.await()
+            }
+        }
+
+
+    }
+
+
+    private fun playAudio(track: URL, audioName: String) {
+        val mediaPlayer1: MediaPlayer? = MediaPlayer().apply {
+            setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
+            )
+            setOnCompletionListener { }
+            setDataSource(track.toString())
+            prepare()
+            start()
+        }
+    }
+
 
     companion object {
         fun newInstance() = SearchListFragment()
@@ -28,7 +72,7 @@ class SearchListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is OnResultSelected) {
+        if (context is OnResultSelected) {
             listener = context
         }
     }
@@ -42,7 +86,9 @@ class SearchListFragment : Fragment() {
 
 
         //Observe the result as livedata (access data with -it-)
-        viewModel.results.observe(this, { recycler.adapter = SearchRecyclerAdapter(it!!.results, listener) })
+        viewModel.results.observe(
+            this,
+            { recycler.adapter = SearchRecyclerAdapter(it!!.results, listener) })
         setAdapter()
 
         searchButton.setOnClickListener() {
@@ -72,7 +118,10 @@ class SearchListFragment : Fragment() {
     }
 
 
-    internal inner class SearchRecyclerAdapter(private val results: List<DemoApi.Model.Result>?, private var clickListener: OnResultSelected) :
+    internal inner class SearchRecyclerAdapter(
+        private val results: List<DemoApi.Model.Result>?,
+        private var clickListener: OnResultSelected
+    ) :
         RecyclerView.Adapter<SearchRecyclerAdapter.SearchViewHolder>() {
 
         internal inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -81,6 +130,7 @@ class SearchListFragment : Fragment() {
             private val addButton: Button = view.addButton
             private val playButton: Button = view.playButton
 
+            @ExperimentalCoroutinesApi
             fun initialize(result: DemoApi.Model.Result, action: OnResultSelected) {
                 name.text = result.name
                 username.text = result.username
@@ -90,6 +140,7 @@ class SearchListFragment : Fragment() {
                 }
                 playButton.setOnClickListener() {
                     action.onClickPlay(result, adapterPosition)
+                    getSound(result.id)
                 }
 
             }
