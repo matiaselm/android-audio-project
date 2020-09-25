@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.net.toUri
 import com.example.audioproject.Tag.TAG
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
 
                 Log.d(TAG, "lifecycleScope, result: $result")
                 if (result != null) {
-                    val soundUrl: URL = result!!.previews[2] // High quality mp3
+                    val soundUrl = URL(result!!.previews.preview_hq_mp3) // High quality mp3
                     Log.d(TAG, "soundUrl: $soundUrl")
                     val play = async(Dispatchers.IO) {
                         playAudio(soundUrl, result!!.name)
@@ -84,6 +85,6 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
     @ExperimentalCoroutinesApi
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
         Log.d(TAG, result.id.toString() + "play")
-        // getSound(result.id) // This is the thing that is supposed to add functionality to play selected sound
+         getSound(result.id) // This is the thing that is supposed to add functionality to play selected sound
     }
 }
