@@ -5,12 +5,14 @@ import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.net.toUri
 import com.example.audioproject.Tag.TAG
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import kotlinx.android.synthetic.main.recycler_item_search.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -19,50 +21,45 @@ import java.io.IOException
 import java.net.URL
 
 class MainActivity : AppCompatActivity(), OnResultSelected {
-    lateinit var viewModel: MainViewModel
+    val context = this
 
-    @ExperimentalCoroutinesApi
-    private fun getSound(id: Int) {
-        try {
-            var result: DemoApi.Model.Sound? = null
+    private fun playAudio(id: Int) {
+        var result: DemoApi.Model.Sound? = null
 
-            Log.d(TAG, "getSound id: $id")
+        Log.d(TAG, "playAudio id: $id")
+        lifecycleScope.launch(Dispatchers.IO) {
+            result = WebServiceRepository().getSound(id.toString())
 
-            lifecycleScope.launch(Dispatchers.IO) {
+            Log.d(TAG, "lifecycleScope, result: $result")
 
-                result = WebServiceRepository().getSound(id.toString())
+            if (result != null) {
+                val soundUrl = URL(result!!.previews.preview_hq_mp3) // High quality mp3
+                val soundName = result!!.name
 
-                Log.d(TAG, "lifecycleScope, result: $result")
-                if (result != null) {
-                    val soundUrl = URL(result!!.previews.preview_hq_mp3) // High quality mp3
-                    Log.d(TAG, "soundUrl: $soundUrl")
-                    val play = async(Dispatchers.IO) {
-                        playAudio(soundUrl, result!!.name)
+                Log.d(TAG, "soundUrl: $soundUrl")
+                val play = async(Dispatchers.IO) {
+                    MediaPlayer().apply {
+                        setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                        )
+
+                        setOnCompletionListener {
+                            Toast.makeText(context,"Finished playing: $soundName",Toast.LENGTH_SHORT).show()
+                        }
+
+                        setDataSource(soundUrl.toString())
+                        prepare()
+                        start()
                     }
-
-                    play.await()
-                } else {
-                    Log.d(TAG, "result = null, $result")
                 }
+
+                play.await()
+            } else {
+                Log.d(TAG, "result = null, $result")
             }
-        } catch (e: IOException) {
-            Log.d(TAG, "error in getSound: $e")
-        }
-    }
-
-
-    private fun playAudio(track: URL, audioName: String) {
-        val mediaPlayer1: MediaPlayer? = MediaPlayer().apply {
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-            setOnCompletionListener { }
-            setDataSource(track.toString())
-            prepare()
-            start()
         }
     }
 
@@ -85,6 +82,6 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
     @ExperimentalCoroutinesApi
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
         Log.d(TAG, result.id.toString() + "play")
-         getSound(result.id) // This is the thing that is supposed to add functionality to play selected sound
+        playAudio(result.id) // This is the thing that is supposed to add functionality to play selected sound
     }
 }
