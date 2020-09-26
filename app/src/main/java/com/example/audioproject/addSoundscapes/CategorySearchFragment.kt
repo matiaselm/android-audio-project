@@ -32,15 +32,40 @@ class CategorySearchFragment: Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        category1.text = "category 1"
+        category1.text = "banjo"
         category2.text = "category 2"
         category3.text = "category 3"
         category4.text = "category 4"
+
         category1.setOnClickListener{
             val resultListFragment = ResultListFragment.newInstance(category1.text.toString())
             activity?.supportFragmentManager
                 ?.beginTransaction()
-                ?.replace(R.id.container, resultListFragment, "stuff")
+                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
+                ?.addToBackStack(null)
+                ?.commit()
+        }
+        category2.setOnClickListener{
+            val resultListFragment = ResultListFragment.newInstance(category2.text.toString())
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
+                ?.addToBackStack(null)
+                ?.commit()
+        }
+        category3.setOnClickListener{
+            val resultListFragment = ResultListFragment.newInstance(category3.text.toString())
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
+                ?.addToBackStack(null)
+                ?.commit()
+        }
+        category4.setOnClickListener{
+            val resultListFragment = ResultListFragment.newInstance(category4.text.toString())
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
                 ?.addToBackStack(null)
                 ?.commit()
         }

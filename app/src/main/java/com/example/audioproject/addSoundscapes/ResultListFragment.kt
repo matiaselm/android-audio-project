@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.audioproject.R
 import kotlinx.android.synthetic.main.activity_new_sound_scape.*
+import java.io.Serializable
 
 class ResultListFragment : Fragment() {
+    lateinit var category: Serializable
 
     companion object {
         fun newInstance(category: String) : ResultListFragment {
@@ -27,13 +29,16 @@ class ResultListFragment : Fragment() {
 
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        Log.d("cat", category.toString())
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var stuff = arguments!!.getSerializable("category")
-        Log.d("stuff", stuff.toString())
+        category = arguments!!.getSerializable("category")!!
         return inflater.inflate(R.layout.fragment_result_list, newSScontainer, false)
     }
 }
