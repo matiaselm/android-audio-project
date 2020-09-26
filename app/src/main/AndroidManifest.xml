@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MyApp">
         <activity android:name=".mySoundscapes.MySoundscapeActivity"></activity>
         <activity android:name=".allSounds.AllSoundsActivity" />
-        <activity android:name=".addSoundscapes.AddSoundscapeActivity" />
+        <activity android:name=".addSoundscapes.NewSoundscapeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
