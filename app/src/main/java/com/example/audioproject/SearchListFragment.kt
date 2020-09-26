@@ -67,8 +67,6 @@ class SearchListFragment : Fragment() {
         }
         //.observe(this, {userlist.adapter = UserRecyclerAdapter(it?.sortedBy { that -> that.lastname }, this)})
 
-        //TODO make a textfield and a button to search for different data
-        //TODO display the livedata in a recyclerview below
     }
 
     fun setAdapter() {

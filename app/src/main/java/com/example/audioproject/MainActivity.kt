@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, SearchListFragment.newInstance())
+                .replace(R.id.container, NavigatorFragment.newInstance())
                 .commit()
         }
     }
