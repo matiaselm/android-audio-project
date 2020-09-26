@@ -6,16 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.audioproject.DemoApi
 import com.example.audioproject.R
 import com.example.audioproject.SearchListFragment
 import kotlinx.android.synthetic.main.activity_new_sound_scape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 
 class AddSoundFragment: Fragment() {
-    companion object{
-        fun newInstance() = AddSoundFragment()
-    }
 
+    companion object {
+        fun newInstance(soundList: ArrayList<DemoApi.Model.Result>): AddSoundFragment {
+            val args = Bundle()
+            args.putSerializable("key", soundList)
+            val fragment = AddSoundFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
