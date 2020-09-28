@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.audioproject.DemoApi
 import com.example.audioproject.R
-import java.io.Serializable
 
 class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
     var soundList = ArrayList<DemoApi.Model.Result>()
@@ -13,7 +12,7 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_sound_scape)
+        setContentView(R.layout.activity_new_soundscape)
         Log.d("stuff", soundList.toString())
         if (savedInstanceState == null) {
             supportFragmentManager

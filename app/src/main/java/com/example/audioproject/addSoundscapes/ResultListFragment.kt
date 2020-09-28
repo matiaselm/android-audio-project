@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.DemoApi
 import com.example.audioproject.MainViewModel
 import com.example.audioproject.R
-import kotlinx.android.synthetic.main.activity_new_sound_scape.*
+import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_result_list.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
 import kotlinx.android.synthetic.main.recycler_item_result.view.*

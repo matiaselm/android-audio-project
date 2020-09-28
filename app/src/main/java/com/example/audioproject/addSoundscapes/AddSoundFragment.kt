@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.audioproject.DemoApi
 import com.example.audioproject.R
 import com.example.audioproject.SearchListFragment
-import kotlinx.android.synthetic.main.activity_new_sound_scape.*
+import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 
 class AddSoundFragment: Fragment() {

@@ -22,7 +22,7 @@ import java.io.IOException
 import java.net.URL
 
 class MainActivity : AppCompatActivity(), OnResultSelected {
-    val context = this
+    private val context = this
 
     private fun playAudio(id: Int) {
         var result: DemoApi.Model.Sound? = null

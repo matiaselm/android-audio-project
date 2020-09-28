@@ -9,12 +9,14 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.example.audioproject.R
-import kotlinx.android.synthetic.main.activity_new_sound_scape.*
+import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_category_search.*
 
-class CategorySearchFragment: Fragment(){
+class CategorySearchFragment : Fragment() {
 
-    companion object{
+    private val categories = ArrayList<String>()
+
+    companion object {
         fun newInstance() = CategorySearchFragment()
     }
 
@@ -27,17 +29,34 @@ class CategorySearchFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_category_search, newSScontainer,false)
+        categories.add("Banjo")
+        categories.add("People")
+        categories.add("Cats")
+        categories.add("Nature")
+
+        return inflater.inflate(R.layout.fragment_category_search, newSScontainer, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        category1.text = "banjo"
-        category2.text = "category 2"
-        category3.text = "category 3"
-        category4.text = "category 4"
 
-        category1.setOnClickListener{
+
+        /*
+
+        categoryList.adapter = ArrayAdapter(
+            this,
+            android.R.layout.activity_list_item, categories
+        )
+
+        */
+
+
+        category1.text = categories[0]
+        category2.text = categories[1]
+        category3.text = categories[2]
+        category4.text = categories[3]
+
+        category1.setOnClickListener {
             val resultListFragment = ResultListFragment.newInstance(category1.text.toString())
             activity?.supportFragmentManager
                 ?.beginTransaction()
@@ -45,7 +64,8 @@ class CategorySearchFragment: Fragment(){
                 ?.addToBackStack(null)
                 ?.commit()
         }
-        category2.setOnClickListener{
+
+        category2.setOnClickListener {
             val resultListFragment = ResultListFragment.newInstance(category2.text.toString())
             activity?.supportFragmentManager
                 ?.beginTransaction()
@@ -53,7 +73,8 @@ class CategorySearchFragment: Fragment(){
                 ?.addToBackStack(null)
                 ?.commit()
         }
-        category3.setOnClickListener{
+
+        category3.setOnClickListener {
             val resultListFragment = ResultListFragment.newInstance(category3.text.toString())
             activity?.supportFragmentManager
                 ?.beginTransaction()
@@ -61,7 +82,8 @@ class CategorySearchFragment: Fragment(){
                 ?.addToBackStack(null)
                 ?.commit()
         }
-        category4.setOnClickListener{
+
+        category4.setOnClickListener {
             val resultListFragment = ResultListFragment.newInstance(category4.text.toString())
             activity?.supportFragmentManager
                 ?.beginTransaction()

@@ -48,13 +48,21 @@ class SearchListFragment : Fragment() {
         // use viewmodels queryWithText to start a HTTP GET request
         // Observe the result as livedata (access data with -it-)
         viewModel.results.observe(this, {
-            if(it!=null){
+            if (it != null) {
                 recycler.adapter = SearchRecyclerAdapter(it.results, listener)
             } else {
                 val results = ArrayList<DemoApi.Model.Result>()
                 val tags = ArrayList<String>()
                 tags.add("couldn't connect")
-                results.add(DemoApi.Model.Result(0,"none","couldn't connect to service",tags,"Server down"))
+                results.add(
+                    DemoApi.Model.Result(
+                        0,
+                        "none",
+                        "couldn't connect to service",
+                        tags,
+                        "Server down"
+                    )
+                )
                 recycler.adapter = SearchRecyclerAdapter(results, listener)
             }
 
