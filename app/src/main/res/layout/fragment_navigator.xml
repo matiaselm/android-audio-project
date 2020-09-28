@@ -42,7 +42,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/button2"
-            android:text="@string/my_soundscapes" />
+            android:text="@string/my_soundscapes"
+            />
+
     </RelativeLayout>
 
 

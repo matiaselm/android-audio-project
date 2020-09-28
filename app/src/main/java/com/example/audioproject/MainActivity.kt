@@ -1,5 +1,6 @@
 package com.example.audioproject
 
+import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -26,17 +27,17 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
     private fun playAudio(id: Int) {
         var result: DemoApi.Model.Sound? = null
 
-        Log.d(TAG, "playAudio id: $id")
+        Log.d(Tag.TAG, "playAudio id: $id")
         lifecycleScope.launch(Dispatchers.IO) {
             result = WebServiceRepository().getSound(id.toString())
 
-            Log.d(TAG, "lifecycleScope, result: $result")
+            Log.d(Tag.TAG, "lifecycleScope, result: $result")
 
             if (result != null) {
                 val soundUrl = URL(result!!.previews.preview_hq_mp3) // High quality mp3
                 val soundName = result!!.name
 
-                Log.d(TAG, "soundUrl: $soundUrl")
+                Log.d(Tag.TAG, "soundUrl: $soundUrl")
                 val play = async(Dispatchers.IO) {
                     MediaPlayer().apply {
                         setAudioAttributes(
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
                         )
 
                         setOnCompletionListener {
-                            Toast.makeText(context,"Finished playing: $soundName",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context,"Finished playing: $soundName", Toast.LENGTH_SHORT).show()
                         }
 
                         setDataSource(soundUrl.toString())
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
 
                 play.await()
             } else {
-                Log.d(TAG, "result = null, $result")
+                Log.d(Tag.TAG, "result = null, $result")
             }
         }
     }
