@@ -14,6 +14,12 @@ import kotlinx.android.synthetic.main.fragment_add_sound.*
 
 class AddSoundFragment: Fragment() {
 
+    // TODO: Save-btn onClick -> creates soundScape obj from selected sounds and adds them to globalModel-list
+    // TODO: Play-btn onClick -> play all audio on the list simultaneously
+
+    /* TODO: mySoundScapes-activity's fragments/ functionality
+            -> list of soundscapes with the functionality to play whatever of them the user wants
+        */
     companion object {
         fun newInstance(soundList: ArrayList<DemoApi.Model.Result>): AddSoundFragment {
             val args = Bundle()

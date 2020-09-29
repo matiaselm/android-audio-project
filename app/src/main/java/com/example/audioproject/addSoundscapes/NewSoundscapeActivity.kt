@@ -23,7 +23,7 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
     }
 
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
-        TODO("Not yet implemented")
+        // TODO: Add playAudio-funtion here
     }
 
     override fun onClickSound(result: DemoApi.Model.Result, position: Int) {
