@@ -46,9 +46,12 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
                         )
 
                         setOnCompletionListener {
-                            Toast.makeText(this@NewSoundscapeActivity,"Finished playing: $soundName", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@NewSoundscapeActivity,
+                                "Finished playing: $soundName",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-
                         setDataSource(soundUrl.toString())
                         prepare()
                         start()
@@ -62,7 +65,7 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
         }
     }
 
-override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_soundscape)
         Log.d("stuff", soundList.toString())

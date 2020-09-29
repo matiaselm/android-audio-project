@@ -11,10 +11,10 @@ import com.example.audioproject.R
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_category_search.*
 
-class CategorySearchFragment : Fragment() {
-
+class CategorySearchFragment : Fragment(), OnCategorySelected {
     private val categories = ArrayList<String>()
     private lateinit var currentContext: Context
+    lateinit var listener: OnCategorySelected
 
     companion object {
         fun newInstance() = CategorySearchFragment()
@@ -23,6 +23,9 @@ class CategorySearchFragment : Fragment() {
     override fun onAttach(context: Context) {
         currentContext = context
         super.onAttach(context)
+        if(context is OnCategorySelected){
+            listener = context
+        }
     }
 
     override fun onCreateView(
@@ -38,58 +41,25 @@ class CategorySearchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_category_search, newSScontainer, false)
     }
 
+    private fun searchCategories(category: String){
+        val resultListFragment = ResultListFragment.newInstance(category)
+        activity?.supportFragmentManager
+            ?.beginTransaction()
+            ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
+            ?.addToBackStack(null)
+            ?.commit()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         categoryList.apply {
             layoutManager = LinearLayoutManager(currentContext)
-            adapter = RecyclerAdapter(categories)
+            adapter = CategoryRecyclerAdapter(categories, listener)
         }
+    }
 
-/*
-        category1.text = categories[0]
-        category2.text = categories[1]
-        category3.text = categories[2]
-        category4.text = categories[3]
-
-        category1.setOnClickListener {
-            val resultListFragment = ResultListFragment.newInstance(category1.text.toString())
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
-                ?.addToBackStack(null)
-                ?.commit()
-        }
-
-        category2.setOnClickListener {
-            val resultListFragment = ResultListFragment.newInstance(category2.text.toString())
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
-                ?.addToBackStack(null)
-                ?.commit()
-        }
-
-        category3.setOnClickListener {
-            val resultListFragment = ResultListFragment.newInstance(category3.text.toString())
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
-                ?.addToBackStack(null)
-                ?.commit()
-        }
-
-        category4.setOnClickListener {
-            val resultListFragment = ResultListFragment.newInstance(category4.text.toString())
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
-                ?.addToBackStack(null)
-                ?.commit()
-        }
-
-        */
-
-
+    override fun onSelect(result: String, position: Int) {
+        searchCategories(result)
     }
 
 
