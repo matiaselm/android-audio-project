@@ -19,7 +19,7 @@ import com.example.audioproject.R
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_result_list.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
-import kotlinx.android.synthetic.main.recycler_item_result.view.*
+import kotlinx.android.synthetic.main.recycler_item_search.view.*
 import java.io.Serializable
 
 class ResultListFragment : Fragment() {
@@ -27,7 +27,6 @@ class ResultListFragment : Fragment() {
     lateinit var listener: OnSoundSelected
     lateinit var viewModel: MainViewModel
     lateinit var viewManager: LinearLayoutManager
-
 
     companion object {
         fun newInstance(category: String) : ResultListFragment {
@@ -65,6 +64,7 @@ class ResultListFragment : Fragment() {
             }
         })
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -87,8 +87,6 @@ class ResultListFragment : Fragment() {
         private var results: List<DemoApi.Model.Result>?,
         private var clickListener: OnSoundSelected) : RecyclerView.Adapter<ResultRecyclerAdapter.ResultViewHolder>() {
 
-
-
             internal inner class ResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 private val playButton: Button = view.playButton
                 private val name: TextView = view.result_name
@@ -108,7 +106,7 @@ class ResultListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_item_result, parent, false)
+                .inflate(R.layout.recycler_item_search, parent, false)
             return ResultViewHolder(view)
         }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import com.example.audioproject.DemoApi
 import com.example.audioproject.R
@@ -12,14 +13,10 @@ import com.example.audioproject.SearchListFragment
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 
-class AddSoundFragment: Fragment() {
+class AddSoundFragment : Fragment() {
 
-    // TODO: Save-btn onClick -> creates soundScape obj from selected sounds and adds them to globalModel-list
-    // TODO: Play-btn onClick -> play all audio on the list simultaneously
+    lateinit var currentContext: Context
 
-    /* TODO: mySoundScapes-activity's fragments/ functionality
-            -> list of soundscapes with the functionality to play whatever of them the user wants
-        */
     companion object {
         fun newInstance(soundList: ArrayList<DemoApi.Model.Result>): AddSoundFragment {
             val args = Bundle()
@@ -29,6 +26,7 @@ class AddSoundFragment: Fragment() {
             return fragment
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,12 +36,18 @@ class AddSoundFragment: Fragment() {
     }
 
     override fun onAttach(context: Context) {
+        currentContext = context
         super.onAttach(context)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fab.setOnClickListener{
+
+        if (soundList.size > 0) {
+            addSoundTextView.visibility = View.GONE
+        }
+
+        fab.setOnClickListener {
             activity?.supportFragmentManager
                 ?.beginTransaction()
                 ?.replace(R.id.newSScontainer, CategorySearchFragment.newInstance())

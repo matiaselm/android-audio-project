@@ -16,6 +16,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.URL
 
+// TODO: Save-btn onClick -> creates soundScape obj from selected sounds and adds them to globalModel-list
+// TODO: Play-btn onClick -> play all audio on the list simultaneously
+
 class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
     var soundList = ArrayList<DemoApi.Model.Result>()
 
@@ -72,7 +75,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
     }
 
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
-        // TODO: Add playAudio-funtion here
         playAudio(result.id)
     }
 
