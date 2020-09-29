@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
+            android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    <!--
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/category1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="4dp"
+            android:text="@string/cat"
+            android:textSize="50sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/category2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/category1"
+            android:layout_margin="4dp"
+            android:text="@string/cat"
+            android:textSize="50sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/category3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/category2"
+            android:layout_margin="4dp"
+            android:text="@string/cat"
+            android:textSize="50sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/category4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/category3"
+            android:layout_margin="4dp"
+            android:text="@string/cat"
+            android:textSize="50sp" />
+
     -->
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/category1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="4dp"
-        android:text="@string/cat"
-        android:textSize="50sp" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/category2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/category1"
-        android:layout_margin="4dp"
-        android:text="@string/cat"
-        android:textSize="50sp" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/category3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/category2"
-        android:layout_margin="4dp"
-        android:text="@string/cat"
-        android:textSize="50sp" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/category4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/category3"
-        android:layout_margin="4dp"
-        android:text="@string/cat"
-        android:textSize="50sp" />
-
-
-</RelativeLayout>
+</FrameLayout>

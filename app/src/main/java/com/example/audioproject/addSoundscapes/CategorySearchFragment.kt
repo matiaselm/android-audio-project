@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.audioproject.R
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_category_search.*
@@ -15,12 +14,14 @@ import kotlinx.android.synthetic.main.fragment_category_search.*
 class CategorySearchFragment : Fragment() {
 
     private val categories = ArrayList<String>()
+    private lateinit var currentContext: Context
 
     companion object {
         fun newInstance() = CategorySearchFragment()
     }
 
     override fun onAttach(context: Context) {
+        currentContext = context
         super.onAttach(context)
     }
 
@@ -39,18 +40,12 @@ class CategorySearchFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        categoryList.apply {
+            layoutManager = LinearLayoutManager(currentContext)
+            adapter = RecyclerAdapter(categories)
+        }
 
-
-        /*
-
-        categoryList.adapter = ArrayAdapter(
-            this,
-            android.R.layout.activity_list_item, categories
-        )
-
-        */
-
-
+/*
         category1.text = categories[0]
         category2.text = categories[1]
         category3.text = categories[2]
@@ -91,6 +86,9 @@ class CategorySearchFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }
+
+        */
+
 
     }
 
