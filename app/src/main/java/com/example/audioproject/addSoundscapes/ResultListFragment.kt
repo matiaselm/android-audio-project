@@ -17,7 +17,7 @@ import com.example.audioproject.MainViewModel
 import com.example.audioproject.R
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_result_list.*
-import kotlinx.android.synthetic.main.recycler_item_search.view.*
+import kotlinx.android.synthetic.main.searchresult_list_item.view.*
 import java.io.Serializable
 
 class ResultListFragment : Fragment() {
@@ -112,7 +112,7 @@ class ResultListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_item_search, parent, false)
+                .inflate(R.layout.searchresult_list_item, parent, false)
             return ResultViewHolder(view)
         }
 

@@ -11,8 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".mySoundscapes.MySoundscapeActivity"/>
-        <activity android:name=".allSounds.AllSoundsActivity" />
+        <activity android:name=".allSounds.AllSoundsActivity"></activity>
+        <activity android:name=".mySoundscapes.MySoundscapesActivity" />
         <activity android:name=".addSoundscapes.NewSoundscapeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -7,10 +7,17 @@ object Tag{
 object CategoryList{
     var categories = ArrayList<String>()
     init{
-        categories.add("Banjo")
+        categories.add("Traffic")
         categories.add("People")
-        categories.add("Cats")
         categories.add("Nature")
+        categories.add("Cats")
+    }
+}
+
+object Soundscapes{
+    var soundscapes = ArrayList<Soundscape>()
+    init{
+
     }
 }
 object Soundlist{

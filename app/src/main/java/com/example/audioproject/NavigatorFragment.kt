@@ -7,14 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.audioproject.addSoundscapes.NewSoundscapeActivity
-import com.example.audioproject.mySoundscapes.MySoundscapeActivity
+import com.example.audioproject.allSounds.AllSoundsActivity
+import com.example.audioproject.mySoundscapes.MySoundscapesActivity
 import kotlinx.android.synthetic.main.fragment_navigator.*
 
-class NavigatorFragment: Fragment() {
+class NavigatorFragment : Fragment() {
 
     companion object {
         fun newInstance() = NavigatorFragment()
-        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -22,18 +23,16 @@ class NavigatorFragment: Fragment() {
             val intent = Intent(activity, NewSoundscapeActivity::class.java)
             startActivity(intent)
         }
+
         button2.setOnClickListener {
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.container, SearchListFragment.newInstance())
-                ?.addToBackStack(null)
-                ?.commit()
-        }
-        button3.setOnClickListener {
-            val intent = Intent(activity, MySoundscapeActivity::class.java)
+            val intent = Intent(activity, AllSoundsActivity::class.java)
             startActivity(intent)
         }
 
+        button3.setOnClickListener {
+            val intent = Intent(activity, MySoundscapesActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onCreateView(
@@ -43,7 +42,4 @@ class NavigatorFragment: Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_navigator, container, false)
     }
-
 }
-
-interface OnSelectFragment
