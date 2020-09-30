@@ -1,27 +1,23 @@
-package com.example.audioproject
+package com.example.audioproject.allSounds
 
 import android.content.Context
-import android.media.AudioAttributes
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.audioproject.DemoApi
+import com.example.audioproject.MainViewModel
+import com.example.audioproject.R
 import kotlinx.android.synthetic.main.fragment_search_list.*
-import kotlinx.android.synthetic.main.recycler_item_search.view.*
+import kotlinx.android.synthetic.main.searchresult_list_item.view.*
 import kotlinx.coroutines.*
-import retrofit2.http.Url
-import java.net.URL
 
 class SearchListFragment : Fragment() {
     lateinit var viewModel: MainViewModel
@@ -120,7 +116,7 @@ class SearchListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_item_search, parent, false)
+                .inflate(R.layout.searchresult_list_item, parent, false)
             return SearchViewHolder(view)
         }
 
