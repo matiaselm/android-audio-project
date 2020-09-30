@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.audioproject.CategoryList
 import com.example.audioproject.R
+import com.example.audioproject.Soundscapes.soundscapes
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_category_search.*
 
@@ -40,7 +41,7 @@ class MySoundscapesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         categoryList.apply {
             layoutManager = LinearLayoutManager(currentContext)
-            adapter = MySoundscapeRecyclerAdapter(CategoryList.categories, listener)
+            adapter = MySoundscapeRecyclerAdapter(soundscapes, listener)
         }
     }
 }

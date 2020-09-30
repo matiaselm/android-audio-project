@@ -7,12 +7,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.R
-import kotlinx.android.synthetic.main.category_list_item.view.*
-import kotlinx.android.synthetic.main.category_list_item.view.categoryListItem
+import com.example.audioproject.Soundscape
 import kotlinx.android.synthetic.main.soundscape_list_item.view.*
 
 class MySoundscapeRecyclerAdapter(
-    items: ArrayList<String>,
+    items: ArrayList<Soundscape>,
     clickListener: OnSoundscapeSelected
 ) :
     RecyclerView.Adapter<MySoundscapeRecyclerAdapter.ViewHolder>() {
@@ -52,7 +51,7 @@ class MySoundscapeRecyclerAdapter(
 
     override fun onBindViewHolder(holder: MySoundscapeRecyclerAdapter.ViewHolder, position: Int) {
         val result = soundscapes[position]
-        holder.init(listener, result)
+        holder.init(listener, result.name)
     }
 
     override fun getItemCount(): Int {

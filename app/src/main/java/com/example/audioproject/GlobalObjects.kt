@@ -13,3 +13,10 @@ object CategoryList{
         categories.add("Cats")
     }
 }
+
+object Soundscapes{
+    var soundscapes = ArrayList<Soundscape>()
+    init{
+
+    }
+}
