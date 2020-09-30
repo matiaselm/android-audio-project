@@ -98,6 +98,14 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
     }
 
     override fun onSelect(result: String, position: Int) {
-        Log.d("beep", "boop")
+        // TODO("Not yet implemented")
+        Log.d("LMAO", result)
+
+        val resultListFragment = ResultListFragment.newInstance(result)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.newSScontainer, resultListFragment, "stuff")
+            .addToBackStack(null)
+            .commit()
     }
 }
