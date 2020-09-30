@@ -89,9 +89,7 @@ class ResultListFragment : Fragment() {
         }
     }
 
-    internal inner class ResultRecyclerAdapter(
-        private var results: List<DemoApi.Model.Result>?
-    ) : RecyclerView.Adapter<ResultRecyclerAdapter.ResultViewHolder>() {
+    internal inner class ResultRecyclerAdapter(private var results: List<DemoApi.Model.Result>?) : RecyclerView.Adapter<ResultRecyclerAdapter.ResultViewHolder>() {
 
         internal inner class ResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             private val playButton: Button = view.playButton

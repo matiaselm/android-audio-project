@@ -20,7 +20,7 @@ import java.net.URL
 // TODO: Save-btn onClick -> creates soundScape obj from selected sounds and adds them to globalModel-list
 // TODO: Play-btn onClick -> play all audio on the list simultaneously
 
-class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
+class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySelected {
     var soundList = ArrayList<DemoApi.Model.Result>()
 
     private fun playAudio(id: Int) {
@@ -95,5 +95,9 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
             .replace(R.id.newSScontainer, AddSoundFragment.newInstance(soundList))
             .commit()
 
+    }
+
+    override fun onSelect(result: String, position: Int) {
+        Log.d("beep", "boop")
     }
 }
