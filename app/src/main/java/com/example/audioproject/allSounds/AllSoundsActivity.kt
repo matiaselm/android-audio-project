@@ -18,6 +18,7 @@ import java.net.URL
 class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
     private fun playAudio(id: Int, playButton: Button) {
         var result: DemoApi.Model.Sound? = null
+
         playButton.text = getString(R.string.play_button_playing)
         Log.d(Tag.TAG, "playAudio id: $id")
 
@@ -76,7 +77,6 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
         }
     }
 
-
     override fun onClickResult(result: DemoApi.Model.Result, position: Int) {
         Log.d(Tag.TAG, result.id.toString() + "add")
     }
@@ -89,5 +89,4 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
             playButton
         ) // This is the thing that is supposed to add functionality to play selected sound
     }
-
 }

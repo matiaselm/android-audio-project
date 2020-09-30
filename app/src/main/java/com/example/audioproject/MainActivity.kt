@@ -16,11 +16,6 @@ import kotlinx.coroutines.launch
 import java.net.URL
 
 class MainActivity : AppCompatActivity(){
-    private val context = this
-
-    // playButton is added to the function to manage it's state
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,5 +27,4 @@ class MainActivity : AppCompatActivity(){
                 .commit()
         }
     }
-
 }
