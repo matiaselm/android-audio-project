@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_add_sound.*
 class AddSoundFragment : Fragment() {
 
     lateinit var currentContext: Context
+    lateinit var listener: OnClipSelected
 
     companion object {
         fun newInstance(soundList: ArrayList<DemoApi.Model.Sound>): AddSoundFragment {
@@ -39,6 +40,9 @@ class AddSoundFragment : Fragment() {
     override fun onAttach(context: Context) {
         currentContext = context
         super.onAttach(context)
+        if(context is OnClipSelected){
+            listener = context
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -57,12 +61,14 @@ class AddSoundFragment : Fragment() {
         }
     }
 
-    internal inner class MySoundsRecyclerAdapter(sounds: ArrayList<DemoApi.Model.Sound?>) :
+    internal inner class MySoundsRecyclerAdapter(var mySounds: ArrayList<DemoApi.Model.Sound>) :
             RecyclerView.Adapter<MySoundsRecyclerAdapter.ViewHolder>() {
+
+
 
         internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-            fun initialize(sound: DemoApi.Model.Sound){
+            fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected){
 
             }
 
@@ -73,9 +79,14 @@ class AddSoundFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            TODO("Not yet implemented")
+            val result = mySounds[position]
+            holder.initialize(result, listener)
+
         }
 
-        override fun getItemCount() = sounds.count()
+        override fun getItemCount() = mySounds.count()
     }
+}
+interface OnClipSelected {
+    fun onSelectSound(sound: DemoApi.Model.Sound, position: Int)
 }
