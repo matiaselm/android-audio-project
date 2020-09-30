@@ -65,7 +65,6 @@ class SearchListFragment : Fragment() {
                 )
                 recycler.adapter = SearchRecyclerAdapter(results, listener)
             }
-
         })
 
         setAdapter()
@@ -73,11 +72,9 @@ class SearchListFragment : Fragment() {
         searchButton.setOnClickListener() {
             viewModel.queryWithText(searchField.text.toString())
         }
-        //.observe(this, {userlist.adapter = UserRecyclerAdapter(it?.sortedBy { that -> that.lastname }, this)})
-
     }
 
-    fun setAdapter() {
+    private fun setAdapter() {
         viewManager = LinearLayoutManager(activity)
 
         recycler.apply {
@@ -113,8 +110,9 @@ class SearchListFragment : Fragment() {
                 addButton.setOnClickListener() {
                     action.onClickResult(result, adapterPosition)
                 }
+
                 playButton.setOnClickListener() {
-                    action.onClickPlay(result, adapterPosition)
+                    action.onClickPlay(result, adapterPosition, playButton)
                 }
             }
         }
@@ -138,5 +136,5 @@ class SearchListFragment : Fragment() {
 //TODO implement the onclick on each item
 interface OnResultSelected {
     fun onClickResult(result: DemoApi.Model.Result, position: Int)
-    fun onClickPlay(result: DemoApi.Model.Result, position: Int)
+    fun onClickPlay(result: DemoApi.Model.Result, position: Int, playButton: Button)
 }

@@ -1,43 +1,40 @@
 package com.example.audioproject
 
-import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
-import androidx.core.net.toUri
 import com.example.audioproject.Tag.TAG
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.observe
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.recycler_item_search.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.io.IOException
 import java.net.URL
 
 class MainActivity : AppCompatActivity(), OnResultSelected {
     private val context = this
 
-    private fun playAudio(id: Int) {
+    // playButton is added to the function to manage it's state
+    private fun playAudio(id: Int, playButton: Button) {
         var result: DemoApi.Model.Sound? = null
+        playButton.text = getString(R.string.play_button_playing)
+        Log.d(TAG, "playAudio id: $id")
 
-        Log.d(Tag.TAG, "playAudio id: $id")
         lifecycleScope.launch(Dispatchers.IO) {
             result = WebServiceRepository().getSound(id.toString())
 
-            Log.d(Tag.TAG, "lifecycleScope, result: $result")
+            Log.d(TAG, "lifecycleScope, result: $result")
 
             if (result != null) {
                 val soundUrl = URL(result!!.previews.preview_hq_mp3) // High quality mp3
                 val soundName = result!!.name
 
-                Log.d(Tag.TAG, "soundUrl: $soundUrl")
+
+                Log.d(TAG, "soundUrl: $soundUrl")
                 val play = async(Dispatchers.IO) {
                     MediaPlayer().apply {
                         setAudioAttributes(
@@ -48,7 +45,12 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
                         )
 
                         setOnCompletionListener {
-                            Toast.makeText(context,"Finished playing: $soundName", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Finished playing: $soundName",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            playButton.text = getString(R.string.play_button)
                         }
 
                         setDataSource(soundUrl.toString())
@@ -59,7 +61,8 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
 
                 play.await()
             } else {
-                Log.d(Tag.TAG, "result = null, $result")
+                Log.d(TAG, "result = null, $result")
+                playButton.text = getString(R.string.play_button)
             }
         }
     }
@@ -81,8 +84,11 @@ class MainActivity : AppCompatActivity(), OnResultSelected {
     }
 
     @ExperimentalCoroutinesApi
-    override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
+    override fun onClickPlay(result: DemoApi.Model.Result, position: Int, playButton: Button) {
         Log.d(TAG, result.id.toString() + "play")
-        playAudio(result.id) // This is the thing that is supposed to add functionality to play selected sound
+        playAudio(
+            result.id,
+            playButton
+        ) // This is the thing that is supposed to add functionality to play selected sound
     }
 }
