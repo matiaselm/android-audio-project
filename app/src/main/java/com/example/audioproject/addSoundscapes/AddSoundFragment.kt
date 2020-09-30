@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 
 class AddSoundFragment: Fragment() {
+    //TODO list soundlist from activity
 
     companion object {
         fun newInstance(soundList: ArrayList<DemoApi.Model.Result>): AddSoundFragment {

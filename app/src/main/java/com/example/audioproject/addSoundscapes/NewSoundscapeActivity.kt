@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.audioproject.DemoApi
+import com.example.audioproject.MainActivity
 import com.example.audioproject.R
 
 class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
@@ -23,10 +24,12 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected {
     }
 
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onClickSound(result: DemoApi.Model.Result, position: Int) {
+
+        //TODO get the actual sound from result, save preview links
         soundList.add(result)
         Log.d("stuff", "added ${result}")
         Log.d("stuff", soundList.toString())
