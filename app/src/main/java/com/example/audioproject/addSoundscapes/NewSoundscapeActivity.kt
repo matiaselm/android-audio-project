@@ -7,21 +7,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.audioproject.DemoApi
-import com.example.audioproject.MainActivity
-import com.example.audioproject.R
-import com.example.audioproject.Tag
-import com.example.audioproject.WebServiceRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.example.audioproject.*
+import com.example.audioproject.Soundlist.sounds
+import kotlinx.coroutines.*
 import java.net.URL
 
 // TODO: Save-btn onClick -> creates soundScape obj from selected sounds and adds them to globalModel-list
 // TODO: Play-btn onClick -> play all audio on the list simultaneously
 
 class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySelected {
-    var soundList = ArrayList<DemoApi.Model.Result>()
 
     private fun playAudio(id: Int) {
         var result: DemoApi.Model.Sound? = null
@@ -69,11 +63,11 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_soundscape)
-        Log.d("stuff", soundList.toString())
+        Log.d("stuff", sounds.toString())
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.newSScontainer, AddSoundFragment.newInstance(soundList))
+                .replace(R.id.newSScontainer, AddSoundFragment.newInstance(sounds))
                 .commit()
         }
     }
@@ -85,14 +79,23 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
     }
 
     override fun onClickSound(result: DemoApi.Model.Result, position: Int) {
+        var sound: DemoApi.Model.Sound? = null
+        lifecycleScope.launch {
+       // async(Dispatchers.IO) {
+            runBlocking {
+           sound = WebServiceRepository().getSound(result.id.toString())
+                sounds.add(sound!!)
+           Log.d("stuff", sound.toString())
+       }/*.await()*/
 
-        //TODO get the actual sound from result, save preview links
-        soundList.add(result)
+    }
+
+
         Log.d("stuff", "added ${result}")
-        Log.d("stuff", soundList.toString())
+        Log.d("stuff", sounds.count().toString())
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.newSScontainer, AddSoundFragment.newInstance(soundList))
+            .replace(R.id.newSScontainer, AddSoundFragment.newInstance(sounds))
             .commit()
 
     }

@@ -13,3 +13,6 @@ object CategoryList{
         categories.add("Nature")
     }
 }
+object Soundlist{
+    var sounds = ArrayList<DemoApi.Model.Sound>()
+}

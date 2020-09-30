@@ -42,31 +42,21 @@ object DemoApi {
         )
 
         data class Sound(
-    val description: String,
-    val download: String,
     val duration: Double,
-    val id: Int,
     val images: Images,
     val name: String,
     val previews: Previews,
-    val tags: List<String>,
-    val type: String,
-    val url: String,
     val username: String
 )
 
 data class Images(
-    val waveform_bw_l: String,
     val waveform_bw_m: String,
-    val waveform_l: String,
     val waveform_m: String
 )
 
 data class Previews(
     @SerializedName("preview-hq-mp3")
     val preview_hq_mp3: String,
-    @SerializedName("preview-lq-mp3")
-    val preview_lq_mp3: String,
 
 )
 

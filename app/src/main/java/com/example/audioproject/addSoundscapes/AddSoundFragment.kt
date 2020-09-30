@@ -18,7 +18,7 @@ class AddSoundFragment : Fragment() {
     lateinit var currentContext: Context
 
     companion object {
-        fun newInstance(soundList: ArrayList<DemoApi.Model.Result>): AddSoundFragment {
+        fun newInstance(soundList: ArrayList<DemoApi.Model.Sound>): AddSoundFragment {
             val args = Bundle()
             args.putSerializable("key", soundList)
             val fragment = AddSoundFragment()
