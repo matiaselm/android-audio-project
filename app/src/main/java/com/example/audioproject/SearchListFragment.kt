@@ -50,6 +50,7 @@ class SearchListFragment : Fragment() {
         viewModel.results.observe(this, {
             if (it != null) {
                 recycler.adapter = SearchRecyclerAdapter(it.results, listener)
+                searchViewInfoText.visibility = View.GONE
             } else {
                 val results = ArrayList<DemoApi.Model.Result>()
                 val tags = ArrayList<String>()
