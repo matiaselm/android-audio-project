@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.DemoApi
 import com.example.audioproject.R
+import com.example.audioproject.Soundlist.sounds
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 
@@ -53,5 +55,27 @@ class AddSoundFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }
+    }
+
+    internal inner class MySoundsRecyclerAdapter(sounds: ArrayList<DemoApi.Model.Sound?>) :
+            RecyclerView.Adapter<MySoundsRecyclerAdapter.ViewHolder>() {
+
+        internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+            fun initialize(sound: DemoApi.Model.Sound){
+
+            }
+
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            TODO("Not yet implemented")
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override fun getItemCount() = sounds.count()
     }
 }
