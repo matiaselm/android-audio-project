@@ -16,4 +16,5 @@
 
     <string name="add_sound_text">"There is nothing here.\nAdd sounds with the button below"</string>
     <string name="my_soundscapes_text">"Seems like you haven't made any soundscapes yet."</string>
+    <string name="modify_button">modify</string>
 </resources>
