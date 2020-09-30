@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.audioproject.addSoundscapes.NewSoundscapeActivity
-import com.example.audioproject.mySoundscapes.MySoundscapeActivity
+import com.example.audioproject.mySoundscapes.MySoundscapesActivity
 import kotlinx.android.synthetic.main.fragment_navigator.*
 
 class NavigatorFragment: Fragment() {
@@ -30,7 +30,7 @@ class NavigatorFragment: Fragment() {
                 ?.commit()
         }
         button3.setOnClickListener {
-            val intent = Intent(activity, MySoundscapeActivity::class.java)
+            val intent = Intent(activity, MySoundscapesActivity::class.java)
             startActivity(intent)
         }
 
