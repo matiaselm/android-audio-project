@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.audioproject.CategoryList.categories
 import com.example.audioproject.R
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_category_search.*
 
-class CategorySearchFragment : Fragment(), OnCategorySelected {
-    private val categories = ArrayList<String>()
+class CategorySearchFragment : Fragment() {
     private lateinit var currentContext: Context
     lateinit var listener: OnCategorySelected
 
@@ -23,7 +23,7 @@ class CategorySearchFragment : Fragment(), OnCategorySelected {
     override fun onAttach(context: Context) {
         currentContext = context
         super.onAttach(context)
-        if(context is OnCategorySelected){
+        if (context is OnCategorySelected) {
             listener = context
         }
     }
@@ -33,21 +33,8 @@ class CategorySearchFragment : Fragment(), OnCategorySelected {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        categories.add("Banjo")
-        categories.add("People")
-        categories.add("Cats")
-        categories.add("Nature")
 
         return inflater.inflate(R.layout.fragment_category_search, newSScontainer, false)
-    }
-
-    private fun searchCategories(category: String){
-        val resultListFragment = ResultListFragment.newInstance(category)
-        activity?.supportFragmentManager
-            ?.beginTransaction()
-            ?.replace(R.id.newSScontainer, resultListFragment, "stuff")
-            ?.addToBackStack(null)
-            ?.commit()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -57,10 +44,4 @@ class CategorySearchFragment : Fragment(), OnCategorySelected {
             adapter = CategoryRecyclerAdapter(categories, listener)
         }
     }
-
-    override fun onSelect(result: String, position: Int) {
-        searchCategories(result)
-    }
-
-
 }

@@ -24,7 +24,9 @@ class CategoryRecyclerAdapter(
 
         var categoryName: TextView = itemView.categoryListItem
 
-        fun init(action: OnCategorySelected) {
+        fun init(action: OnCategorySelected, result: String) {
+            categoryName.text = result
+
             itemView.setOnClickListener {
                 val position: Int = adapterPosition
                 val categoryName = itemView.categoryListItem.text.toString()
@@ -48,7 +50,7 @@ class CategoryRecyclerAdapter(
 
     override fun onBindViewHolder(holder: CategoryRecyclerAdapter.ViewHolder, position: Int) {
         val result = categories[position]
-        holder.init(listener)
+        holder.init(listener, result)
     }
 
     override fun getItemCount(): Int {

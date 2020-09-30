@@ -10,43 +10,4 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </androidx.recyclerview.widget.RecyclerView>
-
-    <!--
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/category1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="4dp"
-            android:text="@string/cat"
-            android:textSize="50sp" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/category2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/category1"
-            android:layout_margin="4dp"
-            android:text="@string/cat"
-            android:textSize="50sp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/category3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/category2"
-            android:layout_margin="4dp"
-            android:text="@string/cat"
-            android:textSize="50sp" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/category4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/category3"
-            android:layout_margin="4dp"
-            android:text="@string/cat"
-            android:textSize="50sp" />
-
-    -->
 </FrameLayout>
