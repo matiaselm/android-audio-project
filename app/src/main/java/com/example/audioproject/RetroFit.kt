@@ -50,7 +50,6 @@ object DemoApi {
 )
 
 data class Images(
-    val waveform_bw_m: String,
     val waveform_m: String
 )
 
