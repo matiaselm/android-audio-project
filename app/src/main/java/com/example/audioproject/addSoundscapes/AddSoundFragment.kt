@@ -38,6 +38,16 @@ class AddSoundFragment : Fragment() {
     lateinit var currentContext: Context
     lateinit var listener: OnClipSelected
 
+    fun playAllSounds(){
+        val soundUris = ArrayList<String>()
+        for(sound in sounds){
+            soundUris.add(sound.previews.preview_hq_mp3)
+        }
+
+
+
+    }
+
     companion object {
         fun newInstance(soundList: ArrayList<DemoApi.Model.Sound>): AddSoundFragment {
             val args = Bundle()
@@ -59,7 +69,7 @@ class AddSoundFragment : Fragment() {
     override fun onAttach(context: Context) {
         currentContext = context
         super.onAttach(context)
-        if(context is OnClipSelected){
+        if (context is OnClipSelected) {
             listener = context
         }
     }
@@ -71,6 +81,15 @@ class AddSoundFragment : Fragment() {
             addSoundTextView.visibility = View.GONE
         }
 
+        saveSoundscapeButton.setOnClickListener {
+            Log.d(TAG, "save on click")
+        }
+
+        playSoundscapeButton.setOnClickListener {
+            Log.d(TAG, "play on click")
+            sounds
+        }
+
         fab.setOnClickListener {
             activity?.supportFragmentManager
                 ?.beginTransaction()
@@ -78,16 +97,14 @@ class AddSoundFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }
-        soundList.apply{
+        soundList.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = MySoundsRecyclerAdapter(sounds)
         }
     }
 
     internal inner class MySoundsRecyclerAdapter(var mySounds: ArrayList<DemoApi.Model.Sound>) :
-            RecyclerView.Adapter<MySoundsRecyclerAdapter.ViewHolder>() {
-
-
+        RecyclerView.Adapter<MySoundsRecyclerAdapter.ViewHolder>() {
 
         internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -95,25 +112,23 @@ class AddSoundFragment : Fragment() {
             var soundName: TextView = view.singleSoundName
             var soundUserName: TextView = view.soundUserName
             var playbutton: Button = view.soundPlayButton
-            fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected){
+            fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
-                var uri = URL(sound.images.waveform_m)
-                lifecycleScope.launch{
+                val uri = URL(sound.images.waveform_m)
+                lifecycleScope.launch {
                     showImg(getImage(uri), soundImage)
                 }
                 Log.d(TAG, soundImage.toString())
                 soundName.text = sound.name
                 soundUserName.text = sound.username
-                itemView.setOnClickListener{
+                itemView.setOnClickListener {
                     action.onSelectSound(sound, adapterPosition)
                 }
 
-                playbutton.setOnClickListener{
+                playbutton.setOnClickListener {
                     //TODO onclickplay
                 }
-
             }
-
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -130,18 +145,19 @@ class AddSoundFragment : Fragment() {
 
         override fun getItemCount() = mySounds.count()
 
-       private suspend fun getImage(url: URL) = withContext(Dispatchers.IO){
+        private suspend fun getImage(url: URL) = withContext(Dispatchers.IO) {
             val allText = url.openStream()
-           val decodeStream = BitmapFactory.decodeStream(allText)
+            val decodeStream = BitmapFactory.decodeStream(allText)
 
-           return@withContext decodeStream
+            return@withContext decodeStream
         }
 
-        private fun showImg(i: Bitmap, image: ImageView){
+        private fun showImg(i: Bitmap, image: ImageView) {
             image.setImageBitmap(i)
         }
     }
 }
+
 interface OnClipSelected {
     fun onSelectSound(sound: DemoApi.Model.Sound, position: Int)
 }
