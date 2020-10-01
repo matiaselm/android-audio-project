@@ -87,6 +87,6 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
         playAudio(
             result.id,
             playButton
-        ) // This is the thing that is supposed to add functionality to play selected sound
+        ) // This is the thing that is supposed to add functionality to play selected sound_list_item
     }
 }

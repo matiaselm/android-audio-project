@@ -1,7 +1,7 @@
 package com.example.audioproject
 
 object Tag{
-    const val TAG = "sound-app"
+    const val TAG = "sound_list_item-app"
 }
 
 object CategoryList{

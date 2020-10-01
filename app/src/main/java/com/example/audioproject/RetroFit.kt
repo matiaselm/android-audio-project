@@ -121,7 +121,7 @@ class WebServiceRepository() {
         }
     }
 
-    // call this to start a GET request in mainactivity, takes in id of sound
+    // call this to start a GET request in mainactivity, takes in id of sound_list_item
     suspend fun getSound(id: String): DemoApi.Model.Sound? {
         return try {
             call.getSound(id, DemoApi.token)

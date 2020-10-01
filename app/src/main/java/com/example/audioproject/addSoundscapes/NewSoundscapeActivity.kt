@@ -113,6 +113,6 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
     }
 
     override fun onSelectSound(sound: DemoApi.Model.Sound, position: Int) {
-        Log.d("stuff", "sound clicked")
+        Log.d("stuff", "sound_list_item clicked")
     }
 }
