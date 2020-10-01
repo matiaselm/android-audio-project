@@ -3,6 +3,8 @@ package com.example.audioproject.addSoundscapes
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,24 +14,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.audioproject.DemoApi
-import com.example.audioproject.R
-import com.example.audioproject.Soundlist
+import com.example.audioproject.*
 import com.example.audioproject.Soundlist.sounds
 import com.example.audioproject.Tag.TAG
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 import kotlinx.android.synthetic.main.sound_list_item.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.net.URI
 import java.net.URL
 
@@ -38,14 +36,40 @@ class AddSoundFragment : Fragment() {
     lateinit var currentContext: Context
     lateinit var listener: OnClipSelected
 
-    fun playAllSounds(){
-        val soundUris = ArrayList<String>()
-        for(sound in sounds){
-            soundUris.add(sound.previews.preview_hq_mp3)
+    private fun playAudio(sounds: ArrayList<DemoApi.Model.Sound>) {
+
+        val sourceList = ArrayList<String>()
+        for (sound in sounds) {
+            sourceList.add(sound.previews.preview_hq_mp3)
         }
 
+        for (source in sourceList) {
+            lateinit var mp: MediaPlayer
+            lifecycleScope.launch(Dispatchers.IO) {
+                val play = async(Dispatchers.IO) {
+                    mp = MediaPlayer().apply {
+                        setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                        )
 
-
+                        setOnCompletionListener {
+                            Toast.makeText(
+                                currentContext,
+                                "Finished playing soundscape",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        setDataSource(source)
+                        prepare()
+                    }
+                }
+                play.await()
+                mp.start()
+            }
+        }
     }
 
     companion object {
@@ -87,7 +111,7 @@ class AddSoundFragment : Fragment() {
 
         playSoundscapeButton.setOnClickListener {
             Log.d(TAG, "play on click")
-            sounds
+            playAudio(sounds)
         }
 
         fab.setOnClickListener {
