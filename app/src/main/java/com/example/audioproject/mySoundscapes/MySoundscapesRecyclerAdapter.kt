@@ -3,6 +3,7 @@ package com.example.audioproject.mySoundscapes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -24,9 +25,14 @@ class MySoundscapeRecyclerAdapter(
     ) : RecyclerView.ViewHolder(itemView) {
 
         private var soundscapeName: TextView = itemView.soundscapeName
+        private var playButton: Button = itemView.playButton
+        fun init(action: OnSoundscapeSelected, soundscape: Soundscape) {
+            soundscapeName.text = soundscape.name
 
-        fun init(action: OnSoundscapeSelected, result: String) {
-            soundscapeName.text = result
+            playButton.setOnClickListener {
+                action.onPlay(soundscape, adapterPosition)
+            }
+
 
             itemView.setOnClickListener {
                 val position: Int = adapterPosition
@@ -51,7 +57,7 @@ class MySoundscapeRecyclerAdapter(
 
     override fun onBindViewHolder(holder: MySoundscapeRecyclerAdapter.ViewHolder, position: Int) {
         val result = soundscapes[position]
-        holder.init(listener, result.name)
+        holder.init(listener, result)
     }
 
     override fun getItemCount(): Int {
@@ -61,4 +67,5 @@ class MySoundscapeRecyclerAdapter(
 
 interface OnSoundscapeSelected {
     fun onSelect(result: String, position: Int)
+    fun onPlay(soundscape: Soundscape, position: Int)
 }

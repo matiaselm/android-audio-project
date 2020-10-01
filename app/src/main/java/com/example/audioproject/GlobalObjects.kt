@@ -16,9 +16,6 @@ object CategoryList{
 
 object Soundscapes{
     var soundscapes = ArrayList<Soundscape>()
-    init{
-
-    }
 }
 object Soundlist{
     var sounds = ArrayList<DemoApi.Model.Sound>()

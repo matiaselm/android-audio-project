@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.*
 import com.example.audioproject.Soundlist.sounds
+import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag.TAG
 import com.example.audioproject.allSounds.AllSoundsActivity
 import com.example.audioproject.mySoundscapes.MySoundscapesActivity
@@ -109,9 +110,14 @@ class AddSoundFragment : Fragment() {
         }
 
         saveSoundscapeButton.setOnClickListener {
-            var soundscape = Soundscape(soundscapeNameInput.text.toString(), sounds)
-            Soundscapes.soundscapes.add(soundscape)
-            sounds.clear()
+            var arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
+            var soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds)
+            Log.d("add", soundscape.ssSounds.toString())
+            soundscapes.add(soundscape)
+            //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
+            //here
+            Soundlist.sounds.clear()
+            //^ here
             val intent = Intent(activity, MySoundscapesActivity::class.java)
             startActivity(intent)
         }
