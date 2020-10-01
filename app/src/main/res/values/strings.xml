@@ -18,4 +18,5 @@
     <string name="my_soundscapes_text">"Seems like you haven't made any soundscapes yet."</string>
     <string name="modify_button">modify</string>
     <string name="search_view_info">Type above to search for sounds</string>
+    <string name="remove_button">remove</string>
 </resources>
