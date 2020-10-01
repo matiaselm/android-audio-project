@@ -67,7 +67,7 @@ class AddSoundFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (soundList.size > 0) {
+        if (sounds.size > 0) {
             addSoundTextView.visibility = View.GONE
         }
 
