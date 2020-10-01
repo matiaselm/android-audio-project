@@ -96,6 +96,7 @@ class ResultListFragment : Fragment() {
             private val playButton: Button = view.playButton
             private val name: TextView = view.result_name
             private val username: TextView = view.result_username
+            private val addButton: Button = view.addButton
 
             fun initialize(result: DemoApi.Model.Result, action: OnSoundSelected) {
                 name.text = result.name
@@ -105,7 +106,7 @@ class ResultListFragment : Fragment() {
                     action.onClickPlay(result, adapterPosition)
                 }
 
-                itemView.setOnClickListener {
+                addButton.setOnClickListener {
                     action.onClickSound(result, adapterPosition)
                 }
             }
