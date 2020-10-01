@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/soundImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:contentDescription="@string/placeholder"
             app:srcCompat="@drawable/wave_background" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/singleSoundName"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/placeholder" />
+            android:orientation="vertical"
+            android:layout_weight="5">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/soundUserName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/placeholder" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/singleSoundName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/placeholder" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/soundUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/placeholder" />
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/soundPlayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:text="@string/play_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_weight="1"/>
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>
