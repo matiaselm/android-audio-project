@@ -1,18 +1,29 @@
 package com.example.audioproject.addSoundscapes
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.DemoApi
 import com.example.audioproject.R
+import com.example.audioproject.Soundlist
 import com.example.audioproject.Soundlist.sounds
+import com.example.audioproject.Tag.TAG
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
+import kotlinx.android.synthetic.main.sound_list_item.view.*
+import kotlinx.coroutines.GlobalScope
+import java.net.URI
 
 class AddSoundFragment : Fragment() {
 
@@ -59,6 +70,10 @@ class AddSoundFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }
+        soundList.apply{
+            layoutManager = LinearLayoutManager(activity)
+            adapter = MySoundsRecyclerAdapter(sounds)
+        }
     }
 
     internal inner class MySoundsRecyclerAdapter(var mySounds: ArrayList<DemoApi.Model.Sound>) :
@@ -68,14 +83,31 @@ class AddSoundFragment : Fragment() {
 
         internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+            var soundImage: ImageView = view.soundImage
+            var soundName: TextView = view.singleSoundName
+            var soundUserName: TextView = view.soundUserName
+            var playbutton: Button = view.soundPlayButton
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected){
+                Log.d(TAG, sound.toString())
+                soundImage.setImageURI(Uri.parse(sound.images.waveform_m))
+                soundName.text = sound.name
+                soundUserName.text = sound.username
+                itemView.setOnClickListener{
+                    action.onSelectSound(sound, adapterPosition)
+                }
+
+                playbutton.setOnClickListener{
+                    //TODO onclickplay
+                }
 
             }
 
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            TODO("Not yet implemented")
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.sound_list_item, parent, false)
+            return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
