@@ -1,6 +1,8 @@
 package com.example.audioproject.addSoundscapes
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.DemoApi
@@ -21,9 +24,14 @@ import com.example.audioproject.Soundlist.sounds
 import com.example.audioproject.Tag.TAG
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
+import kotlinx.android.synthetic.main.sound_list_item.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URI
+import java.net.URL
 
 class AddSoundFragment : Fragment() {
 
@@ -88,8 +96,12 @@ class AddSoundFragment : Fragment() {
             var soundUserName: TextView = view.soundUserName
             var playbutton: Button = view.soundPlayButton
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected){
-                Log.d(TAG, sound.toString())
-                soundImage.setImageURI(Uri.parse(sound.images.waveform_m))
+
+                var uri = URL(sound.images.waveform_m)
+                lifecycleScope.launch{
+                    showImg(getImage(uri), soundImage)
+                }
+                Log.d(TAG, soundImage.toString())
                 soundName.text = sound.name
                 soundUserName.text = sound.username
                 itemView.setOnClickListener{
@@ -117,6 +129,17 @@ class AddSoundFragment : Fragment() {
         }
 
         override fun getItemCount() = mySounds.count()
+
+       private suspend fun getImage(url: URL) = withContext(Dispatchers.IO){
+            val allText = url.openStream()
+           val decodeStream = BitmapFactory.decodeStream(allText)
+
+           return@withContext decodeStream
+        }
+
+        private fun showImg(i: Bitmap, image: ImageView){
+            image.setImageBitmap(i)
+        }
     }
 }
 interface OnClipSelected {
