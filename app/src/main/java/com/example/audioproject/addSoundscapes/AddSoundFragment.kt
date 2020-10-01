@@ -109,7 +109,7 @@ class AddSoundFragment : Fragment() {
                 }
 
                 playbutton.setOnClickListener{
-                    //TODO onclickplay
+                    action.onPlaySound(sound, adapterPosition)
                 }
 
             }
@@ -144,4 +144,5 @@ class AddSoundFragment : Fragment() {
 }
 interface OnClipSelected {
     fun onSelectSound(sound: DemoApi.Model.Sound, position: Int)
+    fun onPlaySound(sound: DemoApi.Model.Sound, position: Int)
 }

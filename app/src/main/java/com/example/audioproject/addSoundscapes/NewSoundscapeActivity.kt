@@ -72,6 +72,39 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
         }
     }
 
+    private fun playSound(sound: DemoApi.Model.Sound) {
+lifecycleScope.launch(Dispatchers.IO){
+                val soundUrl = URL(sound.previews.preview_hq_mp3) // High quality mp3
+                val soundName = sound.name
+
+                Log.d(Tag.TAG, "soundUrl: $soundUrl")
+                val play = async(Dispatchers.IO) {
+                    MediaPlayer().apply {
+                        setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                        )
+
+                        setOnCompletionListener {
+                            Toast.makeText(
+                                this@NewSoundscapeActivity,
+                                "Finished playing: $soundName",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        setDataSource(soundUrl.toString())
+                        prepare()
+                        start()
+                    }
+                }
+
+                play.await()
+            }
+        }
+
+
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
 
         playAudio(result.id)
@@ -114,5 +147,9 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
 
     override fun onSelectSound(sound: DemoApi.Model.Sound, position: Int) {
         Log.d("stuff", "sound_list_item clicked")
+    }
+
+    override fun onPlaySound(sound: DemoApi.Model.Sound, position: Int) {
+        playSound(sound)
     }
 }
