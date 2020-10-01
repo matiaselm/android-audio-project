@@ -109,7 +109,7 @@ class AddSoundFragment : Fragment() {
         }
 
         saveSoundscapeButton.setOnClickListener {
-            var soundscape = Soundscape(soundscapeNameInput.text.toString(), sounds)
+            val soundscape = Soundscape(soundscapeNameInput.text.toString(), sounds)
             Soundscapes.soundscapes.add(soundscape)
             sounds.clear()
             val intent = Intent(activity, MySoundscapesActivity::class.java)
