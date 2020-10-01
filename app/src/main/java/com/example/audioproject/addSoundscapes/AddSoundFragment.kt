@@ -1,6 +1,7 @@
 package com.example.audioproject.addSoundscapes
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -17,11 +18,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.audioproject.DemoApi
-import com.example.audioproject.R
-import com.example.audioproject.Soundlist
+import com.example.audioproject.*
 import com.example.audioproject.Soundlist.sounds
 import com.example.audioproject.Tag.TAG
+import com.example.audioproject.allSounds.AllSoundsActivity
+import com.example.audioproject.mySoundscapes.MySoundscapesActivity
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 import kotlinx.android.synthetic.main.sound_list_item.*
@@ -82,7 +83,11 @@ class AddSoundFragment : Fragment() {
         }
 
         saveSoundscapeButton.setOnClickListener {
-            Log.d(TAG, "save on click")
+            var soundscape = Soundscape(soundscapeNameInput.text.toString(), sounds)
+            Soundscapes.soundscapes.add(soundscape)
+            sounds.clear()
+            val intent = Intent(activity, MySoundscapesActivity::class.java)
+            startActivity(intent)
         }
 
         playSoundscapeButton.setOnClickListener {
