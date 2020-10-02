@@ -140,7 +140,7 @@ class AddSoundFragment : Fragment() {
             adapter = MySoundsRecyclerAdapter(sounds)
         }
 
-        //overrides back button function
+        //overrides back button function to go back to navigatorfragment instead of breaking the adding cycle
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 Log.d(TAG, "backbutton pressed")
