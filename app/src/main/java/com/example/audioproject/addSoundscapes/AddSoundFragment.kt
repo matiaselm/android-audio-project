@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -138,6 +139,16 @@ class AddSoundFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = MySoundsRecyclerAdapter(sounds)
         }
+
+        //overrides back button function
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d(TAG, "backbutton pressed")
+                val intent = Intent(activity, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     internal inner class MySoundsRecyclerAdapter(var mySounds: ArrayList<DemoApi.Model.Sound>) :

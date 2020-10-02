@@ -17,6 +17,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 import java.io.IOException
+import java.io.Serializable
 import java.net.URL
 
 object DemoApi {
@@ -47,17 +48,17 @@ object DemoApi {
     val name: String,
     val previews: Previews,
     val username: String
-)
+) : Serializable
 
 data class Images(
     val waveform_m: String
-)
+) : Serializable
 
 data class Previews(
     @SerializedName("preview-hq-mp3")
     val preview_hq_mp3: String,
 
-)
+) : Serializable
 
 /*        data class Sound(
             val id: Int,
