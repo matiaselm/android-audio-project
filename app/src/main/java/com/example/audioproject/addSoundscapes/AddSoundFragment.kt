@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,22 +15,19 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.size
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.*
 import com.example.audioproject.Soundlist.sounds
+import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag.TAG
-import com.example.audioproject.allSounds.AllSoundsActivity
-import com.example.audioproject.mySoundscapes.MySoundscapesActivity
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
-import kotlinx.android.synthetic.main.sound_list_item.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
 import kotlinx.coroutines.*
-import java.net.URI
 import java.net.URL
 
 class AddSoundFragment : Fragment() {
@@ -57,14 +53,7 @@ class AddSoundFragment : Fragment() {
                                 .setUsage(AudioAttributes.USAGE_MEDIA)
                                 .build()
                         )
-
-                        setOnCompletionListener {
-                            Toast.makeText(
-                                currentContext,
-                                "Finished playing soundscape",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        setOnCompletionListener {}
                         setDataSource(source)
                         prepare()
                     }
@@ -73,6 +62,20 @@ class AddSoundFragment : Fragment() {
                 mp.start()
             }
         }
+    }
+
+    private fun saveSoundscape(){
+        val arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
+        val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds)
+        Log.d("add", soundscape.ssSounds.toString())
+        soundscapes.add(soundscape)
+        //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
+
+        sounds.clear()
+
+        Toast.makeText(currentContext, "Saved soundscape ${soundscape.name}", Toast.LENGTH_SHORT).show()
+
+        startActivity(Intent(activity, NewSoundscapeActivity::class.java))
     }
 
     companion object {
@@ -109,15 +112,10 @@ class AddSoundFragment : Fragment() {
         }
 
         saveSoundscapeButton.setOnClickListener {
-            val soundscape = Soundscape(soundscapeNameInput.text.toString(), sounds)
-            Soundscapes.soundscapes.add(soundscape)
-            sounds.clear()
-            val intent = Intent(activity, MySoundscapesActivity::class.java)
-            startActivity(intent)
+            saveSoundscape()
         }
 
         playSoundscapeButton.setOnClickListener {
-            Log.d(TAG, "play on click")
             playAudio(sounds)
         }
 
@@ -128,10 +126,20 @@ class AddSoundFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }
+
         soundList.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = MySoundsRecyclerAdapter(sounds)
         }
+
+        //overrides back button function to go back to navigatorfragment instead of breaking the adding cycle
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(activity, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     internal inner class MySoundsRecyclerAdapter(var mySounds: ArrayList<DemoApi.Model.Sound>) :
@@ -139,10 +147,10 @@ class AddSoundFragment : Fragment() {
 
         internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-            var soundImage: ImageView = view.soundImage
-            var soundName: TextView = view.singleSoundName
-            var soundUserName: TextView = view.soundUserName
-            var playbutton: Button = view.soundPlayButton
+            private val soundImage: ImageView = view.soundImage
+            private val soundName: TextView = view.singleSoundName
+            private val soundUserName: TextView = view.soundUserName
+            private val playButton: Button = view.soundPlayButton
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
                 val uri = URL(sound.images.waveform_m)
@@ -152,11 +160,12 @@ class AddSoundFragment : Fragment() {
                 Log.d(TAG, soundImage.toString())
                 soundName.text = sound.name
                 soundUserName.text = sound.username
+
                 itemView.setOnClickListener {
                     action.onSelectSound(sound, adapterPosition)
                 }
 
-                playbutton.setOnClickListener{
+                playButton.setOnClickListener{
                     action.onPlaySound(sound, adapterPosition)
                 }
             }
@@ -185,6 +194,10 @@ class AddSoundFragment : Fragment() {
 
         private fun showImg(i: Bitmap, image: ImageView) {
             image.setImageBitmap(i)
+        }
+
+        private fun updateList(){
+            notifyDataSetChanged()
         }
     }
 }

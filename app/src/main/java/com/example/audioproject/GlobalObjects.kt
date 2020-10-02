@@ -17,7 +17,7 @@ object CategoryList{
 object Soundscapes{
     var soundscapes = ArrayList<Soundscape>()
     init{
-
+        soundscapes = ArrayList<Soundscape>()
     }
 }
 object Soundlist{
