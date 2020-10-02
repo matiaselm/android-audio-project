@@ -46,7 +46,7 @@ class MySoundscapesFragment : Fragment() {
             adapter = MySoundscapeRecyclerAdapter(soundscapes, listener)
         }
 
-        Log.d("status", soundscapes[0].ssSounds.toString())
+        // Log.d("status", soundscapes[0].ssSounds.toString())
 
     }
 }

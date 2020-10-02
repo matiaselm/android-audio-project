@@ -31,12 +31,14 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
                 .commit()
         }
     }
+
     private fun playAudio(sounds: ArrayList<DemoApi.Model.Sound>) {
         Log.d("ss", sounds.toString())
         val sourceList = ArrayList<String>()
         for (sound in sounds) {
             sourceList.add(sound.previews.preview_hq_mp3)
         }
+
         Log.d("source", sourceList.toString())
         for (source in sourceList) {
             lateinit var mp: MediaPlayer
