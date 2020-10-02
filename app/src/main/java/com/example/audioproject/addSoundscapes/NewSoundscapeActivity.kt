@@ -12,10 +12,8 @@ import com.example.audioproject.Soundlist.sounds
 import kotlinx.coroutines.*
 import java.net.URL
 
-// TODO: Save-btn onClick -> creates soundScape obj from selected sounds and adds them to globalModel-list
-// TODO: Play-btn onClick -> play all audio on the list simultaneously
-
-class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySelected, OnClipSelected {
+class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySelected,
+    OnClipSelected {
 
     private fun playAudio(id: Int) {
         var result: DemoApi.Model.Sound? = null
@@ -73,59 +71,54 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
     }
 
     private fun playSound(sound: DemoApi.Model.Sound) {
-lifecycleScope.launch(Dispatchers.IO){
-                val soundUrl = URL(sound.previews.preview_hq_mp3) // High quality mp3
-                val soundName = sound.name
+        lifecycleScope.launch(Dispatchers.IO) {
+            val soundUrl = URL(sound.previews.preview_hq_mp3) // High quality mp3
+            val soundName = sound.name
 
-                Log.d(Tag.TAG, "soundUrl: $soundUrl")
-                val play = async(Dispatchers.IO) {
-                    MediaPlayer().apply {
-                        setAudioAttributes(
-                            AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .build()
-                        )
+            Log.d(Tag.TAG, "soundUrl: $soundUrl")
+            val play = async(Dispatchers.IO) {
+                MediaPlayer().apply {
+                    setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+                    )
 
-                        setOnCompletionListener {
-                            Toast.makeText(
-                                this@NewSoundscapeActivity,
-                                "Finished playing: $soundName",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        setDataSource(soundUrl.toString())
-                        prepare()
-                        start()
+                    setOnCompletionListener {
+                        Toast.makeText(
+                            this@NewSoundscapeActivity,
+                            "Finished playing: $soundName",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+                    setDataSource(soundUrl.toString())
+                    prepare()
+                    start()
                 }
-
-                play.await()
             }
+
+            play.await()
         }
+    }
 
 
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
-
         playAudio(result.id)
-
     }
 
     override fun onClickSound(result: DemoApi.Model.Result, position: Int) {
         var sound: DemoApi.Model.Sound? = null
         lifecycleScope.launch {
-       // async(Dispatchers.IO) {
+            // async(Dispatchers.IO) {
             runBlocking {
-           sound = WebServiceRepository().getSound(result.id.toString())
+                sound = WebServiceRepository().getSound(result.id.toString())
                 sounds.add(sound!!)
-           Log.d("stuff", sound.toString())
-       }/*.await()*/
+                Log.d("stuff", sound.toString())
+            }/*.await()*/
 
-    }
+        }
 
-
-        Log.d("stuff", "added ${result}")
-        Log.d("stuff", sounds.count().toString())
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.newSScontainer, AddSoundFragment.newInstance(sounds))
@@ -134,9 +127,6 @@ lifecycleScope.launch(Dispatchers.IO){
     }
 
     override fun onSelect(result: String, position: Int) {
-        // TODO("Not yet implemented")
-        Log.d("LMAO", result)
-
         val resultListFragment = ResultListFragment.newInstance(result)
         supportFragmentManager
             .beginTransaction()

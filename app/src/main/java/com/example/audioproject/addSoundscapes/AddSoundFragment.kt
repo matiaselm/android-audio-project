@@ -75,6 +75,7 @@ class AddSoundFragment : Fragment() {
 
         Toast.makeText(currentContext, "Saved soundscape ${soundscape.name}", Toast.LENGTH_SHORT).show()
 
+        // Aloittaa uuden aktiviteetin ladatakseen äänilistan uudestaan, tähän parempi tapa myöhemmin
         startActivity(Intent(activity, NewSoundscapeActivity::class.java))
     }
 
@@ -196,7 +197,7 @@ class AddSoundFragment : Fragment() {
             image.setImageBitmap(i)
         }
 
-        private fun updateList(){
+        public fun update(){
             notifyDataSetChanged()
         }
     }
