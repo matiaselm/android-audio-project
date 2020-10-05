@@ -58,6 +58,8 @@ class AddSoundFragment : Fragment() {
                         )
                         setOnCompletionListener {}
                         setDataSource(source)
+
+                        // setVolume(left: Float, right: Float) - from volumelist[index]
                         setVolume(volume[index], volume[index])
                         prepare()
                     }
@@ -168,6 +170,7 @@ class AddSoundFragment : Fragment() {
                 lifecycleScope.launch {
                     showImg(getImage(uri), soundImage)
                 }
+
                 Log.d(TAG, soundImage.toString())
                 soundName.text = sound.name
                 soundUserName.text = sound.username
