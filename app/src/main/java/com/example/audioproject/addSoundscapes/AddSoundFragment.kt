@@ -26,6 +26,7 @@ import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag.TAG
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
+import kotlinx.android.synthetic.main.sound_list_item.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
 import kotlinx.coroutines.*
 import java.net.URL
@@ -152,6 +153,7 @@ class AddSoundFragment : Fragment() {
             private val soundName: TextView = view.singleSoundName
             private val soundUserName: TextView = view.soundUserName
             private val playButton: Button = view.soundPlayButton
+            private val removeButton: Button = view.soundRemoveButton
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
                 val uri = URL(sound.images.waveform_m)
@@ -169,6 +171,12 @@ class AddSoundFragment : Fragment() {
                 playButton.setOnClickListener{
                     action.onPlaySound(sound, adapterPosition)
                 }
+
+                removeButton.setOnClickListener{
+                    //action.onRemoveSound(sound, adapterPosition)
+                    sounds.removeAt(adapterPosition)
+                    notifyDataSetChanged()
+                }
             }
         }
 
@@ -181,7 +189,6 @@ class AddSoundFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val result = mySounds[position]
             holder.initialize(result, listener)
-
         }
 
         override fun getItemCount() = mySounds.count()
@@ -195,10 +202,6 @@ class AddSoundFragment : Fragment() {
 
         private fun showImg(i: Bitmap, image: ImageView) {
             image.setImageBitmap(i)
-        }
-
-        public fun update(){
-            notifyDataSetChanged()
         }
     }
 }
