@@ -24,9 +24,9 @@ import com.example.audioproject.*
 import com.example.audioproject.Soundlist.sounds
 import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag.TAG
+import com.google.android.material.slider.Slider
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
-import kotlinx.android.synthetic.main.sound_list_item.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
 import kotlinx.coroutines.*
 import java.net.URL
@@ -35,10 +35,11 @@ class AddSoundFragment : Fragment() {
 
     lateinit var currentContext: Context
     lateinit var listener: OnClipSelected
+    lateinit var volumeList: ArrayList<Float>
 
-    private fun playAudio(sounds: ArrayList<DemoApi.Model.Sound>) {
-
+    private fun playSoundscape(sounds: ArrayList<DemoApi.Model.Sound>, volume: ArrayList<Float>) {
         val sourceList = ArrayList<String>()
+
         for (sound in sounds) {
             sourceList.add(sound.previews.preview_hq_mp3)
         }
@@ -118,7 +119,7 @@ class AddSoundFragment : Fragment() {
         }
 
         playSoundscapeButton.setOnClickListener {
-            playAudio(sounds)
+            playSoundscape(sounds, volumeList)
         }
 
         fab.setOnClickListener {
@@ -154,6 +155,7 @@ class AddSoundFragment : Fragment() {
             private val soundUserName: TextView = view.soundUserName
             private val playButton: Button = view.soundPlayButton
             private val removeButton: Button = view.soundRemoveButton
+            private val slider: Slider = view.volumeSlider
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
                 val uri = URL(sound.images.waveform_m)
@@ -173,9 +175,12 @@ class AddSoundFragment : Fragment() {
                 }
 
                 removeButton.setOnClickListener{
-                    //action.onRemoveSound(sound, adapterPosition)
                     sounds.removeAt(adapterPosition)
                     notifyDataSetChanged()
+                }
+
+                slider.addOnChangeListener { slider, value, _ ->
+                    Log.d(TAG, "Volume changed to: $value")
                 }
             }
         }
