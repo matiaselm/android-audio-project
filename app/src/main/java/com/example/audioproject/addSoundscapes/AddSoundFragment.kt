@@ -17,7 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.*
@@ -29,11 +29,18 @@ import kotlinx.android.synthetic.main.fragment_add_sound.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
 import kotlinx.coroutines.*
 import java.net.URL
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProviders
+import okhttp3.internal.notify
+import okhttp3.internal.notifyAll
+
 
 class AddSoundFragment : Fragment() {
 
     lateinit var currentContext: Context
     lateinit var listener: OnClipSelected
+    private var viewModel = SoundViewModel()
 
     private fun playAudio(sounds: ArrayList<DemoApi.Model.Sound>) {
 
@@ -127,12 +134,20 @@ class AddSoundFragment : Fragment() {
                 ?.addToBackStack(null)
                 ?.commit()
         }
-
+        viewModel.liveSounds.value = sounds
+        Log.d("wee", viewModel.liveSounds.value.toString())
         soundList.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = MySoundsRecyclerAdapter(sounds)
         }
 
+        val nameObserver = Observer<MutableList<DemoApi.Model.Sound>> { sounds ->
+            Log.d("new", "brand spanking new data $sounds")
+            soundList.adapter = MySoundsRecyclerAdapter(sounds)
+        }
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        viewModel.liveSounds.observe(viewLifecycleOwner, nameObserver)
+
+       // vmp.liveRecords.observe(this, {soundList.adapter = MySoundsRecyclerAdapter(it)})
         //overrides back button function to go back to navigatorfragment instead of breaking the adding cycle
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -143,7 +158,7 @@ class AddSoundFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    internal inner class MySoundsRecyclerAdapter(var mySounds: ArrayList<DemoApi.Model.Sound>) :
+    internal inner class MySoundsRecyclerAdapter(var mySounds: MutableList<DemoApi.Model.Sound>) :
         RecyclerView.Adapter<MySoundsRecyclerAdapter.ViewHolder>() {
 
         internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -152,6 +167,7 @@ class AddSoundFragment : Fragment() {
             private val soundName: TextView = view.singleSoundName
             private val soundUserName: TextView = view.soundUserName
             private val playButton: Button = view.soundPlayButton
+            private val deleteButton: Button = view.soundRemoveButton
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
                 val uri = URL(sound.images.waveform_m)
@@ -164,6 +180,10 @@ class AddSoundFragment : Fragment() {
 
                 itemView.setOnClickListener {
                     action.onSelectSound(sound, adapterPosition)
+                }
+
+                deleteButton.setOnClickListener{
+                    action.onDeleteSound(sound, adapterPosition)
                 }
 
                 playButton.setOnClickListener{
@@ -203,7 +223,34 @@ class AddSoundFragment : Fragment() {
     }
 }
 
+class SoundViewModel: ViewModel() {
+
+    val liveSounds: MutableLiveData<MutableList<DemoApi.Model.Sound>> by lazy {
+        MutableLiveData<MutableList<DemoApi.Model.Sound>>()
+    }
+
+        val liveRecords = liveData(Dispatchers.IO) {
+            emit(sounds)
+        }
+
+
+    fun <T> MutableLiveData<T>.notifyObserver() {
+        this.value = this.value
+    }
+    fun addSound(sound: DemoApi.Model.Sound) {
+        liveSounds.value?.add(sound)
+        liveSounds.notifyObserver()
+    }
+    fun delSound(sound: DemoApi.Model.Sound){
+        liveSounds.value?.remove(sound)
+        liveSounds.notifyObserver()
+    }
+    }
+
+
+
 interface OnClipSelected {
     fun onSelectSound(sound: DemoApi.Model.Sound, position: Int)
     fun onPlaySound(sound: DemoApi.Model.Sound, position: Int)
+    fun onDeleteSound(sound: DemoApi.Model.Sound, position: Int)
 }
