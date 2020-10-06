@@ -1,5 +1,6 @@
 package com.example.audioproject.mySoundscapes
 
+import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -7,10 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.example.audioproject.DemoApi
-import com.example.audioproject.R
-import com.example.audioproject.Soundscape
-import com.example.audioproject.Soundscapes
+import com.example.audioproject.*
 import com.example.audioproject.Soundscapes.soundscapes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -21,6 +19,7 @@ import kotlinx.coroutines.launch
     */
 
 class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_soundscape)
