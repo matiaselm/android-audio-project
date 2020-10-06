@@ -21,7 +21,7 @@ import java.io.Serializable
 import java.net.URL
 
 object DemoApi {
-    private const val URL = "https://freesound.org/"
+    private const val URL = "https://freesound.org/apiv2/"
     //token is from registering in freesound.org
     const val token = "TwC9eGABRWKuCNfmh7L0fd0mZbJSX0TlnXTu1NzX"
 
@@ -76,13 +76,19 @@ data class Previews(
         //get api call with text search, might have to change this
 
         //TODO limit search results
-        @GET("apiv2/search/text/")
+        @GET("search/text/")
         suspend fun getSounds(
             @Query("query") query: String,
             @Query("token") token: String
         ): Model.Search
 
-        @GET("apiv2/sounds/{Id}")
+        @GET("search/text/?filter=username:Ambientsoundapp%20tag:{tag}")
+        suspend fun getSoundsByTag(
+            @Path("tag") tag: String,
+            @Query("token") token: String
+        ): Model.Search
+
+        @GET("sounds/{Id}")
         suspend fun getSound(
             @Path("Id") id: String,
             @Query("token") token: String
@@ -115,6 +121,15 @@ class WebServiceRepository() {
     suspend fun getSounds(query: String): DemoApi.Model.Search? {
         return try {
             call.getSounds(query, DemoApi.token)
+        } catch (e: IOException) {
+            Log.d(TAG, "$e")
+            null
+        }
+    }
+
+    suspend fun getSoundsByTag(tag: String):DemoApi.Model.Search?{
+        return try {
+            call.getSounds(tag, DemoApi.token)
         } catch (e: IOException) {
             Log.d(TAG, "$e")
             null
