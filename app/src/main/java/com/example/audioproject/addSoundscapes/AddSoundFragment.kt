@@ -34,7 +34,6 @@ import kotlinx.coroutines.*
 import java.net.URL
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import okhttp3.internal.notify
 import okhttp3.internal.notifyAll
@@ -98,6 +97,7 @@ class AddSoundFragment : Fragment() {
         //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
         sounds.clear()
         volumeList.clear()
+        addSoundTextView.visibility = View.VISIBLE
         soundList.removeAllViews()
 
         Toast.makeText(currentContext, "Saved soundscape ${soundscape.name}", Toast.LENGTH_SHORT).show()
