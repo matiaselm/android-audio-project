@@ -1,24 +1,25 @@
 <resources>
     <string name="app_name">Audio Project</string>
 
-    <string name="search_button">search</string>
-
-    <string name="add_button">add</string>
-    <string name="play_button">play</string>
-    <string name="play_button_playing">playing</string>
+    <string name="search">search</string>
+    <string name="add">add</string>
+    <string name="play">play</string>
+    <string name="playing">playing</string>
+    <string name="remove">remove</string>
+    <string name="save">save</string>
+    <string name="modify">modify</string>
 
     <string name="placeholder">placeholder</string>
+    <string name="cat">cat</string>
 
     <string name="add_soundscape">add new soundscape</string>
     <string name="all_sounds">all sounds</string>
+
     <string name="my_soundscapes">my soundscapes</string>
-    <string name="cat">cat</string>
+    <string name="soundscape_size">Sounds: </string>
 
     <string name="add_sound_text">"There is nothing here.\nAdd sounds with the button below"</string>
     <string name="my_soundscapes_text">"Seems like you haven't made any soundscapes yet."</string>
-    <string name="modify_button">modify</string>
     <string name="search_view_info">Type above to search for sounds</string>
-    <string name="remove_button">remove</string>
-    <string name="save_button">save</string>
     <string name="soundscape_name_hint">soundscape name</string>
 </resources>

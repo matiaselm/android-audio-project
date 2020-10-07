@@ -1,5 +1,6 @@
 package com.example.audioproject
 
+import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -28,6 +30,13 @@ class MainActivity : AppCompatActivity(){
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 */
+        val sharedPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+        val value = sharedPref.getString(Tag.TAG, "null")
+        Log.d("sharedpref", value!!)
+        var ss = Gson().fromJson<SoundlistJson>(value, SoundlistJson::class.java)
+        if(ss != null) {
+            Soundscapes.soundscapes = ss
+        }
 
         if (savedInstanceState == null) {
             supportFragmentManager

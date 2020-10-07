@@ -19,7 +19,7 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
     private fun playAudio(id: Int, playButton: Button) {
         var result: DemoApi.Model.Sound? = null
 
-        playButton.text = getString(R.string.play_button_playing)
+        playButton.text = getString(R.string.playing)
         Log.d(Tag.TAG, "playAudio id: $id")
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -48,7 +48,7 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
                                 "Finished playing: $soundName",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            playButton.text = getString(R.string.play_button)
+                            playButton.text = getString(R.string.play)
                         }
 
                         setDataSource(soundUrl.toString())
@@ -60,7 +60,7 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
                 play.await()
             } else {
                 Log.d(Tag.TAG, "result = null, $result")
-                playButton.text = getString(R.string.play_button)
+                playButton.text = getString(R.string.play)
             }
         }
     }
