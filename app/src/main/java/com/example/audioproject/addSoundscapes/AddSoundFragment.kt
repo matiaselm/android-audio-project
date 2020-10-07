@@ -219,8 +219,8 @@ class AddSoundFragment : Fragment() {
                 }
 
                 removeButton.setOnClickListener{
+                    soundList.removeViewAt(adapterPosition)
                     sounds.removeAt(adapterPosition)
-                    notifyDataSetChanged()
                 }
 
                 slider.addOnChangeListener { slider, value, _ ->
