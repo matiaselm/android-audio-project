@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.audioproject.*
 import com.example.audioproject.Soundscapes.soundscapes
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_add_sound.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -23,6 +25,8 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_soundscape)
+
+
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()

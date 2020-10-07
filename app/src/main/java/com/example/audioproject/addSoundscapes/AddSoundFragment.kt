@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.JsonWriter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ import java.net.URL
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
 import okhttp3.internal.notify
 import okhttp3.internal.notifyAll
 
@@ -84,6 +86,15 @@ class AddSoundFragment : Fragment() {
         val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds)
         Log.d("add", soundscape.ssSounds.toString())
         soundscapes.add(soundscape)
+
+        var prefString = Gson().toJson(soundscapes)
+        Log.d("sharedpref", prefString)
+        val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()){
+            putString(TAG, prefString)
+            commit()
+        }
+        Log.d("sharedpref", prefString)
 
         //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
         sounds.clear()

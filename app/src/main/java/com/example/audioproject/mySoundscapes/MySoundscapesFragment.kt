@@ -13,10 +13,6 @@ import com.example.audioproject.*
 import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag.TAG
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_my_soundscape.*
-import kotlinx.android.synthetic.main.activity_new_soundscape.*
-import kotlinx.android.synthetic.main.fragment_add_sound.*
-import kotlinx.android.synthetic.main.fragment_category_search.*
 import kotlinx.android.synthetic.main.fragment_my_soundscapes.*
 
 class MySoundscapesFragment : Fragment() {
@@ -53,8 +49,13 @@ class MySoundscapesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+        val value = sharedPref.getString(Tag.TAG, "null")
+        Log.d("sharedpref", value!!)
+        var ss = Gson().fromJson<SoundlistJson>(value, SoundlistJson::class.java)
+        soundscapes = ss
+        Log.d("sharedpref", ss.toString())
 
-        val soundscapeListShared = sharedPrefs.getString("soundscapes",null)
         soundscapeList.apply {
             layoutManager = LinearLayoutManager(currentContext)
             adapter = MySoundscapeRecyclerAdapter(soundscapes, listener)
