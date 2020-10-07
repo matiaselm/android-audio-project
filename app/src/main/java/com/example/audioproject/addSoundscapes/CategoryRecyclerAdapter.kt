@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
+import com.example.audioproject.DemoApi
 import com.example.audioproject.R
+import com.example.audioproject.Soundlist
 import kotlinx.android.synthetic.main.category_list_item.view.*
 
 class CategoryRecyclerAdapter(
@@ -58,6 +62,7 @@ class CategoryRecyclerAdapter(
         return categories.size
     }
 }
+
 
 interface OnCategorySelected {
     fun onSelect(result: String, position: Int)

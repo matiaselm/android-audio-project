@@ -13,10 +13,6 @@ import com.example.audioproject.*
 import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag.TAG
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_my_soundscape.*
-import kotlinx.android.synthetic.main.activity_new_soundscape.*
-import kotlinx.android.synthetic.main.fragment_add_sound.*
-import kotlinx.android.synthetic.main.fragment_category_search.*
 import kotlinx.android.synthetic.main.fragment_my_soundscapes.*
 
 class MySoundscapesFragment : Fragment() {
@@ -24,9 +20,6 @@ class MySoundscapesFragment : Fragment() {
     private lateinit var sharedPrefs: SharedPreferences
 
     lateinit var listener: OnSoundscapeSelected
-
-    val gson = Gson()
-
     companion object {
         fun newInstance() = MySoundscapesFragment()
     }
@@ -53,8 +46,13 @@ class MySoundscapesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+        val value = sharedPref.getString(Tag.TAG, "null")
+        Log.d("sharedpref", value!!)
+        var ss = Gson().fromJson<SoundlistJson>(value, SoundlistJson::class.java)
+        soundscapes = ss
+        Log.d("sharedpref", ss.toString())
 
-        val soundscapeListShared = sharedPrefs.getString("soundscapes",null)
         soundscapeList.apply {
             layoutManager = LinearLayoutManager(currentContext)
             adapter = MySoundscapeRecyclerAdapter(soundscapes, listener)
@@ -63,27 +61,5 @@ class MySoundscapesFragment : Fragment() {
         if (soundscapes.size > 0) {
             mySoundscapeTextView.visibility = View.GONE
         }
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-
-        if (soundscapes.size > 0) {
-            saveSoundscapesToPrefs()
-        }
-    }
-
-    private fun saveSoundscapesToPrefs() {
-        // TODO: save the whole soundscapes-list into sharedpreferences
-
-        // How to add soundscapes into sharedpreferences without losing information?
-        val soundscapesAsJson = gson.toJson(soundscapes)
-
-        Log.d(TAG, "json: $soundscapesAsJson")
-
-        val soundscapesDeserialized = gson.fromJson(soundscapesAsJson,Array<Soundscape>::class.java).toList()
-
-        Log.d(TAG, soundscapesDeserialized.toString())
     }
 }

@@ -1,5 +1,9 @@
 package com.example.audioproject
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.gson.annotations.SerializedName
+
 object Tag{
     const val TAG = "soundscape-app"
 }
@@ -7,10 +11,10 @@ object Tag{
 object CategoryList{
     var categories = ArrayList<String>()
     init{
-        categories.add("Traffic")
         categories.add("People")
-        categories.add("Nature")
-        categories.add("Cats")
+        categories.add("Animals")
+        categories.add("Traffic")
+        categories.add("Weather")
     }
 }
 
@@ -24,3 +28,5 @@ object Soundscapes{
 object Soundlist{
     var sounds = ArrayList<DemoApi.Model.Sound>()
 }
+
+class SoundlistJson : ArrayList<Soundscape>()

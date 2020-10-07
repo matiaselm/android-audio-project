@@ -14,6 +14,7 @@ import java.net.URL
 
 class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySelected,
     OnClipSelected {
+    private val viewmodel = SoundViewModel()
 
     private fun playAudio(id: Int) {
         var result: DemoApi.Model.Sound? = null
@@ -81,6 +82,7 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
             runBlocking {
                 sound = WebServiceRepository().getSound(result.id.toString())
                 sounds.add(sound!!)
+                viewmodel.liveSounds.value = sounds
                 Log.d("stuff", sound.toString())
             }/*.await()*/
 
@@ -136,5 +138,13 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
 
             play.await()
         }
+    }
+
+    override fun onDeleteSound(sound: DemoApi.Model.Sound, position: Int) {
+        Log.d("onDelete", "onDelete called")
+        Log.d("onDelete", viewmodel.liveSounds.value.toString())
+        sounds.remove(sound)
+        viewmodel.liveSounds.value = sounds
+        Log.d("onDelete", viewmodel.liveSounds.value.toString())
     }
 }
