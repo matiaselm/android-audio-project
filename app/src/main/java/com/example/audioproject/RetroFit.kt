@@ -79,6 +79,7 @@ data class Previews(
         @GET("apiv2/search/text/")
         suspend fun getSounds(
             @Query("query") query: String,
+            @Query("filter") filter: String,
             @Query("token") token: String
         ): Model.Search
 
@@ -114,7 +115,7 @@ class WebServiceRepository() {
     // call this to start a GET request in mainactivity, takes in a search word, the api key token is constant
     suspend fun getSounds(query: String): DemoApi.Model.Search? {
         return try {
-            call.getSounds(query, DemoApi.token)
+            call.getSounds(query, "username:Ambientsoundapp", DemoApi.token)
         } catch (e: IOException) {
             Log.d(TAG, "$e")
             null

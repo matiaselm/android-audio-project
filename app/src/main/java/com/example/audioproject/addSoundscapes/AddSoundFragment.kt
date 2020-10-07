@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import com.example.audioproject.*
 import com.example.audioproject.Soundlist.sounds
 import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag.TAG
+import com.google.android.material.slider.Slider
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_add_sound.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
@@ -40,16 +42,19 @@ class AddSoundFragment : Fragment() {
 
     lateinit var currentContext: Context
     lateinit var listener: OnClipSelected
+
     private var viewModel = SoundViewModel()
 
-    private fun playAudio(sounds: ArrayList<DemoApi.Model.Sound>) {
+    lateinit var volumeList: ArrayList<Float>
 
+    private fun playSoundscape(sounds: ArrayList<DemoApi.Model.Sound>, volume: ArrayList<Float>) {
         val sourceList = ArrayList<String>()
+
         for (sound in sounds) {
             sourceList.add(sound.previews.preview_hq_mp3)
         }
 
-        for (source in sourceList) {
+        for ((index, source) in sourceList.withIndex()) {
             lateinit var mp: MediaPlayer
             lifecycleScope.launch(Dispatchers.IO) {
                 val play = async(Dispatchers.IO) {
@@ -62,6 +67,9 @@ class AddSoundFragment : Fragment() {
                         )
                         setOnCompletionListener {}
                         setDataSource(source)
+
+                        // setVolume(left: Float, right: Float) - from volumelist[index]
+                        setVolume(volume[index], volume[index])
                         prepare()
                     }
                 }
@@ -76,8 +84,8 @@ class AddSoundFragment : Fragment() {
         val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds)
         Log.d("add", soundscape.ssSounds.toString())
         soundscapes.add(soundscape)
-        //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
 
+        //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
         sounds.clear()
 
         Toast.makeText(currentContext, "Saved soundscape ${soundscape.name}", Toast.LENGTH_SHORT).show()
@@ -124,7 +132,7 @@ class AddSoundFragment : Fragment() {
         }
 
         playSoundscapeButton.setOnClickListener {
-            playAudio(sounds)
+            playSoundscape(sounds, volumeList)
         }
 
         fab.setOnClickListener {
@@ -148,6 +156,8 @@ class AddSoundFragment : Fragment() {
         viewModel.liveSounds.observe(viewLifecycleOwner, nameObserver)
 
        // vmp.liveRecords.observe(this, {soundList.adapter = MySoundsRecyclerAdapter(it)})
+        volumeList = ArrayList<Float>()
+
         //overrides back button function to go back to navigatorfragment instead of breaking the adding cycle
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -167,13 +177,18 @@ class AddSoundFragment : Fragment() {
             private val soundName: TextView = view.singleSoundName
             private val soundUserName: TextView = view.soundUserName
             private val playButton: Button = view.soundPlayButton
-            private val deleteButton: Button = view.soundRemoveButton
+            private val removeButton: Button = view.soundRemoveButton
+            private val slider: Slider = view.volumeSlider
+
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
+
+                volumeList.add(80.0F)
 
                 val uri = URL(sound.images.waveform_m)
                 lifecycleScope.launch {
                     showImg(getImage(uri), soundImage)
                 }
+
                 Log.d(TAG, soundImage.toString())
                 soundName.text = sound.name
                 soundUserName.text = sound.username
@@ -182,12 +197,24 @@ class AddSoundFragment : Fragment() {
                     action.onSelectSound(sound, adapterPosition)
                 }
 
-                deleteButton.setOnClickListener{
+                /*
+                removeButton.setOnClickListener{
                     action.onDeleteSound(sound, adapterPosition)
                 }
+                */
 
                 playButton.setOnClickListener{
                     action.onPlaySound(sound, adapterPosition)
+                }
+
+                removeButton.setOnClickListener{
+                    sounds.removeAt(adapterPosition)
+                    notifyDataSetChanged()
+                }
+
+                slider.addOnChangeListener { slider, value, _ ->
+                    Log.d(TAG, "Volume changed to: $value")
+                    volumeList[position] = value
                 }
             }
         }
@@ -201,7 +228,6 @@ class AddSoundFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val result = mySounds[position]
             holder.initialize(result, listener)
-
         }
 
         override fun getItemCount() = mySounds.count()
@@ -215,10 +241,6 @@ class AddSoundFragment : Fragment() {
 
         private fun showImg(i: Bitmap, image: ImageView) {
             image.setImageBitmap(i)
-        }
-
-        public fun update(){
-            notifyDataSetChanged()
         }
     }
 }

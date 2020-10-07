@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 object Tag{
-    const val TAG = "sound_list_item-app"
+    const val TAG = "soundscape-app"
 }
 
 object CategoryList{
@@ -23,6 +23,7 @@ object Soundscapes{
         soundscapes = ArrayList<Soundscape>()
     }
 }
+
 object Soundlist{
     var sounds = ArrayList<DemoApi.Model.Sound>()
 }
