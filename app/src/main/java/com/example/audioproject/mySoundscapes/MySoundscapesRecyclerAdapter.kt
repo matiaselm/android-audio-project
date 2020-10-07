@@ -9,9 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.R
-import com.example.audioproject.SoundlistJson
 import com.example.audioproject.Soundscape
-import kotlinx.android.synthetic.main.searchresult_list_item.view.*
+import kotlinx.android.synthetic.main.categoryresult_list_item.view.*
 
 class MySoundscapeRecyclerAdapter(
     items: ArrayList<Soundscape>,
@@ -57,7 +56,7 @@ class MySoundscapeRecyclerAdapter(
         viewType: Int
     ): MySoundscapeRecyclerAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.searchresult_list_item, parent, false)
+            .inflate(R.layout.categoryresult_list_item, parent, false)
 
         return ViewHolder(v)
     }

@@ -25,4 +25,6 @@
 
     <string name="error_saving_soundscape">Please name and add sounds to soundscape</string>
     <string name="saved_soundscape_msg">Saved soundscape </string>
+
+    <string name="finished_playing">Finished playing </string>
 </resources>

@@ -15,8 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.DemoApi
 import com.example.audioproject.MainViewModel
 import com.example.audioproject.R
+import com.example.audioproject.formatResult
 import kotlinx.android.synthetic.main.fragment_search_list.*
-import kotlinx.android.synthetic.main.searchresult_list_item.view.*
+import kotlinx.android.synthetic.main.categoryresult_list_item.view.*
 import kotlinx.coroutines.*
 
 class SearchListFragment : Fragment() {
@@ -95,18 +96,11 @@ class SearchListFragment : Fragment() {
 
         internal inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             private val name: TextView = view.name
-            private val username: TextView = view.info
-            private val addButton: Button = view.addButton
             private val playButton: Button = view.playButton
 
             @ExperimentalCoroutinesApi
             fun initialize(result: DemoApi.Model.Result, action: OnResultSelected) {
-                name.text = result.name
-                username.text = result.username
-
-                addButton.setOnClickListener() {
-                    action.onClickResult(result, adapterPosition)
-                }
+                name.text = formatResult(result.name)
 
                 playButton.setOnClickListener() {
                     action.onClickPlay(result, adapterPosition, playButton)
@@ -116,7 +110,7 @@ class SearchListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.searchresult_list_item, parent, false)
+                .inflate(R.layout.search_list_item, parent, false)
             return SearchViewHolder(view)
         }
 
@@ -132,6 +126,6 @@ class SearchListFragment : Fragment() {
 
 //TODO implement the onclick on each item
 interface OnResultSelected {
-    fun onClickResult(result: DemoApi.Model.Result, position: Int)
+    //fun onClickResult(result: DemoApi.Model.Result, position: Int)
     fun onClickPlay(result: DemoApi.Model.Result, position: Int, playButton: Button)
 }

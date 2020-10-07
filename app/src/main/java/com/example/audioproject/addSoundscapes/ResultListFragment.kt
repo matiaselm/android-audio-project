@@ -15,9 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.DemoApi
 import com.example.audioproject.MainViewModel
 import com.example.audioproject.R
+import com.example.audioproject.formatResult
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_result_list.*
-import kotlinx.android.synthetic.main.searchresult_list_item.view.*
+import kotlinx.android.synthetic.main.categoryresult_list_item.view.*
 import java.io.Serializable
 
 class ResultListFragment : Fragment() {
@@ -94,15 +95,15 @@ class ResultListFragment : Fragment() {
         internal inner class ResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             private val playButton: Button = view.playButton
             private val name: TextView = view.name
-            private val username: TextView = view.info
+            private val info: TextView = view.info
             private val addButton: Button = view.addButton
 
             fun initialize(result: DemoApi.Model.Result, action: OnSoundSelected) {
-                name.text = result.name
-                username.text = result.username
+                name.text = formatResult(result.name)
+                info.text = result.tags.toString()
 
                 playButton.setOnClickListener {
-                    action.onClickPlay(result, adapterPosition)
+                    action.onClickPlay(result, adapterPosition, playButton)
                 }
 
                 addButton.setOnClickListener {
@@ -113,7 +114,7 @@ class ResultListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.searchresult_list_item, parent, false)
+                .inflate(R.layout.categoryresult_list_item, parent, false)
             return ResultViewHolder(view)
         }
 
@@ -128,6 +129,6 @@ class ResultListFragment : Fragment() {
 }
 
 interface OnSoundSelected {
-    fun onClickPlay(result: DemoApi.Model.Result, position: Int)
+    fun onClickPlay(result: DemoApi.Model.Result, position: Int, button: Button)
     fun onClickSound(result: DemoApi.Model.Result, position: Int)
 }

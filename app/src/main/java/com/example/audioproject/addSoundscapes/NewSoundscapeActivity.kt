@@ -4,6 +4,7 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -16,8 +17,10 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
     OnClipSelected {
     private val viewmodel = SoundViewModel()
 
-    private fun playAudio(id: Int) {
+    // Called on the recyclerView of fetched audio
+    private fun playAudioFromResult(id: Int, button: Button) {
         var result: DemoApi.Model.Sound? = null
+        button.isEnabled = false
 
         Log.d(Tag.TAG, "playAudio id: $id")
         lifecycleScope.launch(Dispatchers.IO) {
@@ -27,7 +30,7 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
 
             if (result != null) {
                 val soundUrl = URL(result!!.previews.preview_hq_mp3) // High quality mp3
-                val soundName = result!!.name
+                val soundName = formatResult(result!!.name)
 
                 Log.d(Tag.TAG, "soundUrl: $soundUrl")
                 val play = async(Dispatchers.IO) {
@@ -40,9 +43,10 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
                         )
 
                         setOnCompletionListener {
+                            button.isEnabled = true
                             Toast.makeText(
                                 this@NewSoundscapeActivity,
-                                "Finished playing: $soundName",
+                                "${getString(R.string.finished_playing)} $soundName",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -71,8 +75,8 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
         }
     }
 
-    override fun onClickPlay(result: DemoApi.Model.Result, position: Int) {
-        playAudio(result.id)
+    override fun onClickPlay(result: DemoApi.Model.Result, position: Int, button: Button) {
+        playAudioFromResult(result.id, button)
     }
 
     override fun onClickSound(result: DemoApi.Model.Result, position: Int) {
@@ -104,14 +108,12 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
             .commit()
     }
 
-    override fun onSelectSound(sound: DemoApi.Model.Sound, position: Int) {
-        Log.d("stuff", "sound_list_item clicked")
-    }
 
-    override fun onPlaySound(sound: DemoApi.Model.Sound, position: Int) {
+    override fun onPlaySound(sound: DemoApi.Model.Sound, position: Int, button: Button) {
+        button.isEnabled = false
         lifecycleScope.launch(Dispatchers.IO) {
             val soundUrl = URL(sound.previews.preview_hq_mp3) // High quality mp3
-            val soundName = sound.name
+            val soundName = formatResult(sound.name)
 
             Log.d(Tag.TAG, "soundUrl: $soundUrl")
             val play = async(Dispatchers.IO) {
@@ -124,9 +126,10 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
                     )
 
                     setOnCompletionListener {
+                        button.isEnabled = true
                         Toast.makeText(
                             this@NewSoundscapeActivity,
-                            "Finished playing: $soundName",
+                            "${getString(R.string.finished_playing)} $soundName",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

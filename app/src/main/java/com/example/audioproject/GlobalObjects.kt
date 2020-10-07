@@ -30,3 +30,7 @@ object Soundlist{
 }
 
 class SoundlistJson : ArrayList<Soundscape>()
+
+fun formatResult(result: String):String{
+    return result.dropLast(4)
+}

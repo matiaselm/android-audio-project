@@ -19,7 +19,7 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
     private fun playAudio(id: Int, playButton: Button) {
         var result: DemoApi.Model.Sound? = null
 
-        playButton.text = getString(R.string.playing)
+        playButton.isEnabled = false
         Log.d(Tag.TAG, "playAudio id: $id")
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -43,12 +43,12 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
                         )
 
                         setOnCompletionListener {
+                            playButton.isEnabled = true
                             Toast.makeText(
                                 this@AllSoundsActivity,
-                                "Finished playing: $soundName",
+                                "${getString(R.string.finished_playing)} $soundName",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            playButton.text = getString(R.string.play)
                         }
 
                         setDataSource(soundUrl.toString())
@@ -77,16 +77,17 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
         }
     }
 
+    /*
     override fun onClickResult(result: DemoApi.Model.Result, position: Int) {
         Log.d(Tag.TAG, result.id.toString() + "add")
     }
-
+     */
     @ExperimentalCoroutinesApi
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int, playButton: Button) {
         Log.d(Tag.TAG, result.id.toString() + "play")
         playAudio(
             result.id,
             playButton
-        ) // This is the thing that is supposed to add functionality to play selected sound_list_item
+        )
     }
 }

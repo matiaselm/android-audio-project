@@ -43,42 +43,44 @@ class AddSoundFragment : Fragment() {
 
     lateinit var currentContext: Context
     lateinit var listener: OnClipSelected
-
     private var viewModel = SoundViewModel()
-
     lateinit var volumeList: ArrayList<Float>
 
+    // play all sounds in the visible soundscape
     private fun playSoundscape(sounds: ArrayList<DemoApi.Model.Sound>, volume: ArrayList<Float>) {
         val sourceList = ArrayList<String>()
-        playSoundscapeButton.isEnabled = false
 
-        for (sound in sounds) {
-            sourceList.add(sound.previews.preview_hq_mp3)
-        }
+        if (sourceList.isNotEmpty()) {
+            playSoundscapeButton.isEnabled = false
 
-        for ((index, source) in sourceList.withIndex()) {
-            lateinit var mp: MediaPlayer
-            lifecycleScope.launch(Dispatchers.IO) {
-                val play = async(Dispatchers.IO) {
-                    mp = MediaPlayer().apply {
-                        setAudioAttributes(
-                            AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .build()
-                        )
-                        setOnCompletionListener {
-                            playSoundscapeButton.isEnabled = true
+            for (sound in sounds) {
+                sourceList.add(sound.previews.preview_hq_mp3)
+            }
+
+            for ((index, source) in sourceList.withIndex()) {
+                lateinit var mp: MediaPlayer
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val play = async(Dispatchers.IO) {
+                        mp = MediaPlayer().apply {
+                            setAudioAttributes(
+                                AudioAttributes.Builder()
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                                    .build()
+                            )
+                            setOnCompletionListener {
+                                playSoundscapeButton.isEnabled = true
+                            }
+                            setDataSource(source)
+
+                            // setVolume(left: Float, right: Float) - from volumelist[index]
+                            setVolume(volume[index], volume[index])
+                            prepare()
                         }
-                        setDataSource(source)
-
-                        // setVolume(left: Float, right: Float) - from volumelist[index]
-                        setVolume(volume[index], volume[index])
-                        prepare()
                     }
+                    play.await()
+                    mp.start()
                 }
-                play.await()
-                mp.start()
             }
         }
     }
@@ -112,8 +114,10 @@ class AddSoundFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         } else {
-            Toast.makeText(currentContext,
-                currentContext.getString(R.string.error_saving_soundscape), Toast.LENGTH_SHORT)
+            Toast.makeText(
+                currentContext,
+                currentContext.getString(R.string.error_saving_soundscape), Toast.LENGTH_SHORT
+            )
                 .show()
         }
 
@@ -200,7 +204,6 @@ class AddSoundFragment : Fragment() {
 
             private val soundImage: ImageView = view.soundImage
             private val soundName: TextView = view.singleSoundName
-            private val soundUserName: TextView = view.soundUserName
             private val playButton: Button = view.soundPlayButton
             private val removeButton: Button = view.soundRemoveButton
             private val slider: Slider = view.volumeSlider
@@ -215,12 +218,7 @@ class AddSoundFragment : Fragment() {
                 }
 
                 Log.d(TAG, soundImage.toString())
-                soundName.text = sound.name
-                soundUserName.text = sound.username
-
-                itemView.setOnClickListener {
-                    action.onSelectSound(sound, adapterPosition)
-                }
+                soundName.text = formatResult(sound.name)
 
                 /*
                 removeButton.setOnClickListener{
@@ -229,7 +227,7 @@ class AddSoundFragment : Fragment() {
                 */
 
                 playButton.setOnClickListener {
-                    action.onPlaySound(sound, adapterPosition)
+                    action.onPlaySound(sound, adapterPosition, playButton)
                 }
 
                 removeButton.setOnClickListener {
@@ -238,7 +236,7 @@ class AddSoundFragment : Fragment() {
                     sounds.removeAt(adapterPosition)
                 }
 
-                slider.addOnChangeListener { slider, value, _ ->
+                slider.addOnChangeListener { _, value, _ ->
                     Log.d(TAG, "Volume changed to: $value")
                     volumeList[adapterPosition] = value
                 }
@@ -299,7 +297,6 @@ class SoundViewModel : ViewModel() {
 
 
 interface OnClipSelected {
-    fun onSelectSound(sound: DemoApi.Model.Sound, position: Int)
-    fun onPlaySound(sound: DemoApi.Model.Sound, position: Int)
+    fun onPlaySound(sound: DemoApi.Model.Sound, position: Int, button: Button)
     fun onDeleteSound(sound: DemoApi.Model.Sound, position: Int)
 }
