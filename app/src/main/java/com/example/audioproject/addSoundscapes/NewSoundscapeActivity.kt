@@ -82,13 +82,12 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
     override fun onClickSound(result: DemoApi.Model.Result, position: Int) {
         var sound: DemoApi.Model.Sound? = null
         lifecycleScope.launch {
-            // async(Dispatchers.IO) {
             runBlocking {
                 sound = WebServiceRepository().getSound(result.id.toString())
                 sounds.add(sound!!)
                 viewmodel.liveSounds.value = sounds
                 Log.d("stuff", sound.toString())
-            }/*.await()*/
+            }
 
         }
 

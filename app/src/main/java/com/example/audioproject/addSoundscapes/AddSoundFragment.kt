@@ -86,6 +86,7 @@ class AddSoundFragment : Fragment() {
     }
 
     private fun saveSoundscape() {
+
         if (!soundscapeNameInput.text.isNullOrEmpty() && sounds.isNotEmpty()) {
             val arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
             val soundscape =
@@ -94,7 +95,8 @@ class AddSoundFragment : Fragment() {
             soundscapes.add(soundscape)
 
             val prefString = Gson().toJson(soundscapes)
-            val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+            val sharedPref =
+                activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
             with(sharedPref.edit()) {
                 putString(TAG, prefString)
                 commit()
@@ -110,17 +112,19 @@ class AddSoundFragment : Fragment() {
 
             Toast.makeText(
                 currentContext,
+
                 "${currentContext.getString(R.string.saved_soundscape_msg)} ${soundscape.name}",
+
                 Toast.LENGTH_SHORT
             ).show()
         } else {
             Toast.makeText(
                 currentContext,
+
                 currentContext.getString(R.string.error_saving_soundscape), Toast.LENGTH_SHORT
             )
                 .show()
         }
-
     }
 
     companion object {
@@ -178,13 +182,10 @@ class AddSoundFragment : Fragment() {
         }
 
         val nameObserver = Observer<MutableList<DemoApi.Model.Sound>> { sounds ->
-            Log.d("new", "brand spanking new data $sounds")
             soundList.adapter = MySoundsRecyclerAdapter(sounds)
         }
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         viewModel.liveSounds.observe(viewLifecycleOwner, nameObserver)
-
-        // vmp.liveRecords.observe(this, {soundList.adapter = MySoundsRecyclerAdapter(it)})
         volumeList = ArrayList<Float>()
 
         //overrides back button function to go back to navigatorfragment instead of breaking the adding cycle
@@ -219,12 +220,6 @@ class AddSoundFragment : Fragment() {
 
                 Log.d(TAG, soundImage.toString())
                 soundName.text = formatResult(sound.name)
-
-                /*
-                removeButton.setOnClickListener{
-                    action.onDeleteSound(sound, adapterPosition)
-                }
-                */
 
                 playButton.setOnClickListener {
                     action.onPlaySound(sound, adapterPosition, playButton)
@@ -270,28 +265,8 @@ class AddSoundFragment : Fragment() {
 }
 
 class SoundViewModel : ViewModel() {
-
     val liveSounds: MutableLiveData<MutableList<DemoApi.Model.Sound>> by lazy {
         MutableLiveData<MutableList<DemoApi.Model.Sound>>()
-    }
-
-    val liveRecords = liveData(Dispatchers.IO) {
-        emit(sounds)
-    }
-
-
-    fun <T> MutableLiveData<T>.notifyObserver() {
-        this.value = this.value
-    }
-
-    fun addSound(sound: DemoApi.Model.Sound) {
-        liveSounds.value?.add(sound)
-        liveSounds.notifyObserver()
-    }
-
-    fun delSound(sound: DemoApi.Model.Sound) {
-        liveSounds.value?.remove(sound)
-        liveSounds.notifyObserver()
     }
 }
 
