@@ -49,7 +49,7 @@ class MySoundscapesFragment : Fragment() {
         val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
         val value = sharedPref.getString(Tag.TAG, "null")
         Log.d("sharedpref", value!!)
-        var ss = Gson().fromJson<SoundlistJson>(value, SoundlistJson::class.java)
+        val ss = Gson().fromJson<SoundlistJson>(value, SoundlistJson::class.java)
         soundscapes = ss
         Log.d("sharedpref", ss.toString())
 
