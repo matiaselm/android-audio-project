@@ -22,7 +22,7 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
 
     // Called on the recyclerView of fetched audio
     /**
-     * plays a single sound from soundlist
+     * fetches sounds data with id from freesound and plays it
      * @param id id of a sound to search from freesound
      * @param button to disable it while playing sounds so you cant play multiple sounds at the same time
      */
