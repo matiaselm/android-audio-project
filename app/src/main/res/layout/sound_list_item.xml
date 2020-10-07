@@ -55,7 +55,7 @@
                         android:layout_margin="8dp">
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/volumeDown"
+                            android:id="@+id/volumeIcon"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -74,7 +74,7 @@
                             android:valueTo="1.0"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/volumeDown"
+                            app:layout_constraintStart_toEndOf="@+id/volumeIcon"
                             app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

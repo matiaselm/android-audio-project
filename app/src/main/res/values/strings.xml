@@ -22,6 +22,7 @@
     <string name="my_soundscapes_text">"Seems like you haven't made any soundscapes yet."</string>
     <string name="search_view_info">Type above to search for sounds</string>
     <string name="soundscape_name_hint">soundscape name</string>
+    <string name="search_hint">search term</string>
 
     <string name="error_saving_soundscape">Please name and add sounds to soundscape</string>
     <string name="saved_soundscape_msg">Saved soundscape </string>

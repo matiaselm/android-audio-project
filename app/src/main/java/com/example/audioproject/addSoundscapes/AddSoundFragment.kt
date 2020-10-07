@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.JsonWriter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,11 +30,7 @@ import kotlinx.android.synthetic.main.fragment_add_sound.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
 import kotlinx.coroutines.*
 import java.net.URL
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import com.google.gson.Gson
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
 
 
 class AddSoundFragment : Fragment() {
@@ -208,6 +202,7 @@ class AddSoundFragment : Fragment() {
             private val playButton: Button = view.soundPlayButton
             private val removeButton: Button = view.soundRemoveButton
             private val slider: Slider = view.volumeSlider
+            private val icon: ImageView = view.volumeIcon
 
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
@@ -234,6 +229,16 @@ class AddSoundFragment : Fragment() {
                 slider.addOnChangeListener { _, value, _ ->
                     Log.d(TAG, "Volume changed to: $value")
                     volumeList[adapterPosition] = value
+
+                    if(value == 0.0f){
+                        icon.setImageResource(R.drawable.ic_baseline_volume_mute_24)
+                    }
+                    if(value > 0.0f && value < 0.5f){
+                        icon.setImageResource(R.drawable.ic_baseline_volume_down_24)
+                    }
+                    if(value >= 0.5f){
+                        icon.setImageResource(R.drawable.ic_baseline_volume_up_24)
+                    }
                 }
             }
         }
