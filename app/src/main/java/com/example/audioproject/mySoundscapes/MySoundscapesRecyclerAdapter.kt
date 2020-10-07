@@ -1,5 +1,6 @@
 package com.example.audioproject.mySoundscapes
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioproject.R
 import com.example.audioproject.Soundscape
-import kotlinx.android.synthetic.main.soundscape_list_item.view.*
+import kotlinx.android.synthetic.main.searchresult_list_item.view.*
 
 class MySoundscapeRecyclerAdapter(
     items: ArrayList<Soundscape>,
@@ -24,19 +25,24 @@ class MySoundscapeRecyclerAdapter(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
-        private var soundscapeName: TextView = itemView.soundscapeName
+        private var soundscapeName: TextView = itemView.name
+        private var soundscapeInfo: TextView = itemView.info
         private var playButton: Button = itemView.playButton
+        private var modifyButton: Button = itemView.addButton
+        private val infoText = soundscapeInfo.context.getString(R.string.soundscape_size)
+        @SuppressLint("SetTextI18n")
         fun init(action: OnSoundscapeSelected, soundscape: Soundscape) {
             soundscapeName.text = soundscape.name
+            soundscapeInfo.text = infoText + soundscape.ssSounds.size.toString()
+            modifyButton.text = itemView.context.getString(R.string.modify)
 
             playButton.setOnClickListener {
                 action.onPlay(soundscape, adapterPosition)
             }
 
-
-            itemView.setOnClickListener {
+            modifyButton.setOnClickListener{
                 val position: Int = adapterPosition
-                val name = itemView.soundscapeName.text.toString()
+                val name = itemView.name.text.toString()
 
                 Toast.makeText(itemView.context, name, Toast.LENGTH_SHORT).show()
 
@@ -50,7 +56,7 @@ class MySoundscapeRecyclerAdapter(
         viewType: Int
     ): MySoundscapeRecyclerAdapter.ViewHolder {
         val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.soundscape_list_item, parent, false)
+            .inflate(R.layout.searchresult_list_item, parent, false)
 
         return ViewHolder(v)
     }

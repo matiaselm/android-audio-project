@@ -19,7 +19,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/result_name"
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -27,7 +27,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/result_username"
+            android:id="@+id/info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:text="@string/play_button" />
+                android:text="@string/play" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addButton"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:text="@string/add_button" />
+                android:text="@string/add" />
 
         </LinearLayout>
     </LinearLayout>

@@ -94,8 +94,8 @@ class SearchListFragment : Fragment() {
     ) : RecyclerView.Adapter<SearchRecyclerAdapter.SearchViewHolder>() {
 
         internal inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            private val name: TextView = view.result_name
-            private val username: TextView = view.result_username
+            private val name: TextView = view.name
+            private val username: TextView = view.info
             private val addButton: Button = view.addButton
             private val playButton: Button = view.playButton
 

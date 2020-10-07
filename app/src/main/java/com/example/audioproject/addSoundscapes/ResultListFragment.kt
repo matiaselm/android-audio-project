@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TableLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -94,8 +93,8 @@ class ResultListFragment : Fragment() {
 
         internal inner class ResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             private val playButton: Button = view.playButton
-            private val name: TextView = view.result_name
-            private val username: TextView = view.result_username
+            private val name: TextView = view.name
+            private val username: TextView = view.info
             private val addButton: Button = view.addButton
 
             fun initialize(result: DemoApi.Model.Result, action: OnSoundSelected) {
