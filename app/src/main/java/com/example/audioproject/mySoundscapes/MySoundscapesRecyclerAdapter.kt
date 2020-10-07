@@ -29,25 +29,22 @@ class MySoundscapeRecyclerAdapter(
         private var soundscapeName: TextView = itemView.name
         private var soundscapeInfo: TextView = itemView.info
         private var playButton: Button = itemView.playButton
-        private var modifyButton: Button = itemView.addButton
+        private var removeButton: Button = itemView.addButton
         private val infoText = soundscapeInfo.context.getString(R.string.soundscape_size)
         @SuppressLint("SetTextI18n")
         fun init(action: OnSoundscapeSelected, soundscape: Soundscape) {
             soundscapeName.text = soundscape.name
             soundscapeInfo.text = infoText + soundscape.ssSounds.size.toString()
-            modifyButton.text = itemView.context.getString(R.string.modify)
+            removeButton.text = itemView.context.getString(R.string.remove)
 
             playButton.setOnClickListener {
                 action.onPlay(soundscape, adapterPosition)
             }
 
-            modifyButton.setOnClickListener{
-                val position: Int = adapterPosition
-                val name = itemView.name.text.toString()
+            removeButton.setOnClickListener{
+                action.onDel(soundscape, adapterPosition)
 
-                Toast.makeText(itemView.context, name, Toast.LENGTH_SHORT).show()
 
-                action.onSelect(name, position)
             }
         }
     }
@@ -73,6 +70,6 @@ class MySoundscapeRecyclerAdapter(
 }
 
 interface OnSoundscapeSelected {
-    fun onSelect(result: String, position: Int)
     fun onPlay(soundscape: Soundscape, position: Int)
+    fun onDel(soundscape: Soundscape, position: Int)
 }

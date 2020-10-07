@@ -12,6 +12,7 @@ import com.example.audioproject.*
 import com.example.audioproject.Soundscapes.soundscapes
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_add_sound.*
+import kotlinx.android.synthetic.main.fragment_my_soundscapes.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -67,14 +68,22 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
         }
     }
 
-    override fun onSelect(result: String, position: Int) {
-        // TODO: Add functionality
-    }
 
     override fun onPlay(soundscape: Soundscape, position: Int) {
         Log.d("ss", soundscape.ssSounds.toString() + "clicked")
         Log.d("ss", soundscape.name)
         Log.d("ss", soundscapes[0].ssSounds.toString())
         playSoundscape(soundscape.ssSounds, soundscape.volume)
+    }
+
+    override fun onDel(soundscape: Soundscape, position: Int) {
+        soundscapeList.removeViewAt(position)
+        soundscapes.remove(soundscape)
+        var prefString = Gson().toJson(soundscapes)
+        val sharedPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putString(com.example.audioproject.Tag.TAG, prefString)
+            commit()
+        }
     }
 }

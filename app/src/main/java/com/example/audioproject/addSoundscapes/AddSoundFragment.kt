@@ -80,27 +80,41 @@ class AddSoundFragment : Fragment() {
         }
     }
 
-    private fun saveSoundscape(){
-        val arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
-        val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds, volumeList)
-        Log.d("add", soundscape.ssSounds.toString())
-        soundscapes.add(soundscape)
+    private fun saveSoundscape() {
+        Log.d("test", soundscapeNameInput.text.toString())
+        if (soundscapeNameInput.text.toString() != "" && sounds.count() != 0) {
+            val arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
+            val soundscape =
+                Soundscape(soundscapeNameInput.text.toString(), arraySounds, volumeList)
+            Log.d("add", soundscape.ssSounds.toString())
+            soundscapes.add(soundscape)
 
-        var prefString = Gson().toJson(soundscapes)
-        val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()){
-            putString(TAG, prefString)
-            commit()
+            var prefString = Gson().toJson(soundscapes)
+            val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+            with(sharedPref.edit()) {
+                putString(TAG, prefString)
+                commit()
+            }
+            Log.d("sharedpref", prefString)
+
+            //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
+            sounds.clear()
+            volumeList.clear()
+            addSoundTextView.visibility = View.VISIBLE
+            soundList.removeAllViews()
+
+            Toast.makeText(
+                currentContext,
+                "Saved soundscape ${soundscape.name}",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                currentContext,
+                "Please enter a name for the soundscape or add sounds",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        Log.d("sharedpref", prefString)
-
-        //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
-        sounds.clear()
-        volumeList.clear()
-        addSoundTextView.visibility = View.VISIBLE
-        soundList.removeAllViews()
-
-        Toast.makeText(currentContext, "Saved soundscape ${soundscape.name}", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
@@ -158,13 +172,10 @@ class AddSoundFragment : Fragment() {
         }
 
         val nameObserver = Observer<MutableList<DemoApi.Model.Sound>> { sounds ->
-            Log.d("new", "brand spanking new data $sounds")
             soundList.adapter = MySoundsRecyclerAdapter(sounds)
         }
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         viewModel.liveSounds.observe(viewLifecycleOwner, nameObserver)
-
-       // vmp.liveRecords.observe(this, {soundList.adapter = MySoundsRecyclerAdapter(it)})
         volumeList = ArrayList<Float>()
 
         //overrides back button function to go back to navigatorfragment instead of breaking the adding cycle
@@ -205,12 +216,6 @@ class AddSoundFragment : Fragment() {
                 itemView.setOnClickListener {
                     action.onSelectSound(sound, adapterPosition)
                 }
-
-                /*
-                removeButton.setOnClickListener{
-                    action.onDeleteSound(sound, adapterPosition)
-                }
-                */
 
                 playButton.setOnClickListener{
                     action.onPlaySound(sound, adapterPosition)
@@ -256,26 +261,8 @@ class AddSoundFragment : Fragment() {
 }
 
 class SoundViewModel: ViewModel() {
-
     val liveSounds: MutableLiveData<MutableList<DemoApi.Model.Sound>> by lazy {
         MutableLiveData<MutableList<DemoApi.Model.Sound>>()
-    }
-
-        val liveRecords = liveData(Dispatchers.IO) {
-            emit(sounds)
-        }
-
-
-    fun <T> MutableLiveData<T>.notifyObserver() {
-        this.value = this.value
-    }
-    fun addSound(sound: DemoApi.Model.Sound) {
-        liveSounds.value?.add(sound)
-        liveSounds.notifyObserver()
-    }
-    fun delSound(sound: DemoApi.Model.Sound){
-        liveSounds.value?.remove(sound)
-        liveSounds.notifyObserver()
     }
     }
 
