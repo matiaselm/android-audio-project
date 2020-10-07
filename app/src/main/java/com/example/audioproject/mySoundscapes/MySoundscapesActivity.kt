@@ -35,15 +35,14 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
         }
     }
 
-    private fun playAudio(sounds: ArrayList<DemoApi.Model.Sound>) {
-        Log.d("ss", sounds.toString())
+    private fun playSoundscape(sounds: ArrayList<DemoApi.Model.Sound>, volume: ArrayList<Float>) {
         val sourceList = ArrayList<String>()
+
         for (sound in sounds) {
             sourceList.add(sound.previews.preview_hq_mp3)
         }
 
-        Log.d("source", sourceList.toString())
-        for (source in sourceList) {
+        for ((index, source) in sourceList.withIndex()) {
             lateinit var mp: MediaPlayer
             lifecycleScope.launch(Dispatchers.IO) {
                 val play = async(Dispatchers.IO) {
@@ -54,15 +53,11 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
                                 .setUsage(AudioAttributes.USAGE_MEDIA)
                                 .build()
                         )
-
-                        setOnCompletionListener {
-                            Toast.makeText(
-                                this@MySoundscapesActivity,
-                                "Finished playing soundscape",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        setOnCompletionListener {}
                         setDataSource(source)
+
+                        // setVolume(left: Float, right: Float) - from volumelist[index]
+                        setVolume(volume[index], volume[index])
                         prepare()
                     }
                 }
@@ -80,6 +75,6 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
         Log.d("ss", soundscape.ssSounds.toString() + "clicked")
         Log.d("ss", soundscape.name)
         Log.d("ss", soundscapes[0].ssSounds.toString())
-        playAudio(soundscape.ssSounds)
+        playSoundscape(soundscape.ssSounds, soundscape.volume)
     }
 }

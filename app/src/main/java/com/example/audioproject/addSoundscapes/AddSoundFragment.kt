@@ -83,12 +83,11 @@ class AddSoundFragment : Fragment() {
 
     private fun saveSoundscape(){
         val arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
-        val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds)
+        val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds, volumeList)
         Log.d("add", soundscape.ssSounds.toString())
         soundscapes.add(soundscape)
 
         var prefString = Gson().toJson(soundscapes)
-        Log.d("sharedpref", prefString)
         val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
         with (sharedPref.edit()){
             putString(TAG, prefString)
@@ -98,11 +97,10 @@ class AddSoundFragment : Fragment() {
 
         //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
         sounds.clear()
+        volumeList.clear()
+        soundList.removeAllViews()
 
         Toast.makeText(currentContext, "Saved soundscape ${soundscape.name}", Toast.LENGTH_SHORT).show()
-
-        // Aloittaa uuden aktiviteetin ladatakseen äänilistan uudestaan, tähän parempi tapa myöhemmin
-        startActivity(Intent(activity, NewSoundscapeActivity::class.java))
     }
 
     companion object {
@@ -193,7 +191,7 @@ class AddSoundFragment : Fragment() {
 
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
-                volumeList.add(80.0F)
+                volumeList.add(0.8F)
 
                 val uri = URL(sound.images.waveform_m)
                 lifecycleScope.launch {
@@ -220,12 +218,13 @@ class AddSoundFragment : Fragment() {
 
                 removeButton.setOnClickListener{
                     soundList.removeViewAt(adapterPosition)
+                    volumeList.removeAt(adapterPosition)
                     sounds.removeAt(adapterPosition)
                 }
 
                 slider.addOnChangeListener { slider, value, _ ->
                     Log.d(TAG, "Volume changed to: $value")
-                    volumeList[position] = value
+                    volumeList[adapterPosition] = value
                 }
             }
         }

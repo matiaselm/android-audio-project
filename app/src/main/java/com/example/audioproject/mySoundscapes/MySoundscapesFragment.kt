@@ -20,9 +20,6 @@ class MySoundscapesFragment : Fragment() {
     private lateinit var sharedPrefs: SharedPreferences
 
     lateinit var listener: OnSoundscapeSelected
-
-    val gson = Gson()
-
     companion object {
         fun newInstance() = MySoundscapesFragment()
     }
@@ -64,27 +61,5 @@ class MySoundscapesFragment : Fragment() {
         if (soundscapes.size > 0) {
             mySoundscapeTextView.visibility = View.GONE
         }
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-
-        if (soundscapes.size > 0) {
-            saveSoundscapesToPrefs()
-        }
-    }
-
-    private fun saveSoundscapesToPrefs() {
-        // TODO: save the whole soundscapes-list into sharedpreferences
-
-        // How to add soundscapes into sharedpreferences without losing information?
-        val soundscapesAsJson = gson.toJson(soundscapes)
-
-        Log.d(TAG, "json: $soundscapesAsJson")
-
-        val soundscapesDeserialized = gson.fromJson(soundscapesAsJson,Array<Soundscape>::class.java).toList()
-
-        Log.d(TAG, soundscapesDeserialized.toString())
     }
 }

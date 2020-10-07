@@ -34,8 +34,9 @@ class MainActivity : AppCompatActivity(){
         val value = sharedPref.getString(Tag.TAG, "null")
         Log.d("sharedpref", value!!)
         var ss = Gson().fromJson<SoundlistJson>(value, SoundlistJson::class.java)
-        Soundscapes.soundscapes = ss
-        Log.d("sharedpref", ss.toString())
+        if(ss != null) {
+            Soundscapes.soundscapes = ss
+        }
 
         if (savedInstanceState == null) {
             supportFragmentManager
