@@ -2,7 +2,6 @@ package com.example.audioproject.addSoundscapes
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +16,24 @@ import com.example.audioproject.MainViewModel
 import com.example.audioproject.R
 import com.example.audioproject.formatResult
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
-import kotlinx.android.synthetic.main.fragment_result_list.*
 import kotlinx.android.synthetic.main.categoryresult_list_item.view.*
+import kotlinx.android.synthetic.main.fragment_result_list.*
 import java.io.Serializable
 
+/**
+ * fragment to list sounds selected with category
+ */
 class ResultListFragment : Fragment() {
     private lateinit var category: Serializable
     lateinit var listener: OnSoundSelected
-    lateinit var viewModel: MainViewModel
-    lateinit var viewManager: LinearLayoutManager
+    private lateinit var viewModel: MainViewModel
+    private lateinit var viewManager: LinearLayoutManager
 
     companion object {
+        /**
+         * creates a new instance of the fragment with arguments
+         * @param category selected category for searching sounds from freesound
+         */
         fun newInstance(category: String): ResultListFragment {
             val args = Bundle()
             args.putSerializable("category", category)
@@ -48,10 +54,14 @@ class ResultListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         setAdapter()
+        /**
+         * get call from freesound with retrofit
+         */
         viewModel.queryWithText(category.toString())
-        Log.d("cat", category.toString())
-
-        viewModel.results.observe(this, {
+        /**
+         * results come in as livedata so they are observed to be put on a recyclerview
+         */
+        viewModel.results.observe(viewLifecycleOwner, {
             if (it != null) {
                 result_list.adapter = ResultRecyclerAdapter(it.results)
             } else {
@@ -90,6 +100,10 @@ class ResultListFragment : Fragment() {
         }
     }
 
+    /**
+     * recyclerview adapter
+     * @param results list of results from a query to freesound
+     */
     internal inner class ResultRecyclerAdapter(private var results: List<DemoApi.Model.Result>?) : RecyclerView.Adapter<ResultRecyclerAdapter.ResultViewHolder>() {
 
         internal inner class ResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -128,6 +142,9 @@ class ResultListFragment : Fragment() {
 
 }
 
+/**
+ * onClicks for result list items
+ */
 interface OnSoundSelected {
     fun onClickPlay(result: DemoApi.Model.Result, position: Int, button: Button)
     fun onClickSound(result: DemoApi.Model.Result, position: Int)

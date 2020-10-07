@@ -67,7 +67,7 @@ class SearchListFragment : Fragment() {
 
         setAdapter()
 
-        searchButton.setOnClickListener() {
+        searchButton.setOnClickListener {
             viewModel.queryWithText(searchField.text.toString())
         }
     }
@@ -102,7 +102,7 @@ class SearchListFragment : Fragment() {
             fun initialize(result: DemoApi.Model.Result, action: OnResultSelected) {
                 name.text = formatResult(result.name)
 
-                playButton.setOnClickListener() {
+                playButton.setOnClickListener {
                     action.onClickPlay(result, adapterPosition, playButton)
                 }
             }

@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.JsonWriter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,21 +30,24 @@ import kotlinx.android.synthetic.main.fragment_add_sound.*
 import kotlinx.android.synthetic.main.sound_list_item.view.*
 import kotlinx.coroutines.*
 import java.net.URL
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import com.google.gson.Gson
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
 
+/**
+ * This fragment opens up a view for creating a new soundscape object
+ */
 
 class AddSoundFragment : Fragment() {
 
-    lateinit var currentContext: Context
+    private lateinit var currentContext: Context
     lateinit var listener: OnClipSelected
     private var viewModel = SoundViewModel()
     lateinit var volumeList: ArrayList<Float>
 
-    // play all sounds in the visible soundscape
+    /**
+     * Plays all the sounds you have added for creating the soundscape
+     * @param sounds ArrayList of sounds
+     * @param volume ArrayList of volumes for the sounds
+     */
     private fun playSoundscape(sounds: ArrayList<DemoApi.Model.Sound>, volume: ArrayList<Float>) {
         val sourceList = ArrayList<String>()
 
@@ -72,8 +73,6 @@ class AddSoundFragment : Fragment() {
                                 playSoundscapeButton.isEnabled = true
                             }
                             setDataSource(source)
-
-                            // setVolume(left: Float, right: Float) - from volumelist[index]
                             setVolume(volume[index], volume[index])
                             prepare()
                         }
@@ -85,25 +84,26 @@ class AddSoundFragment : Fragment() {
         }
     }
 
+    //saves soundscape to globalmodel list of soundscapes and to shared preferences
+
+    /**
+     * Saves a soundscape to a globalmodel list and then that globalmodel list to shared preferences
+     * clears all sounds that have been selected for the soundscapes for the creation of new one
+     * @see soundscapes
+     */
     private fun saveSoundscape() {
 
         if (!soundscapeNameInput.text.isNullOrEmpty() && sounds.isNotEmpty()) {
             val arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
-            val soundscape =
-                Soundscape(soundscapeNameInput.text.toString(), arraySounds, volumeList)
-            Log.d("add", soundscape.ssSounds.toString())
+            val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds, volumeList)
             soundscapes.add(soundscape)
-
             val prefString = Gson().toJson(soundscapes)
-            val sharedPref =
-                activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
+            val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
             with(sharedPref.edit()) {
                 putString(TAG, prefString)
                 commit()
             }
-            Log.d("sharedpref", prefString)
 
-            //sounds.clear poistaa kaikki yllä tehdyn soundscape objektin äänet vaikka sounds ei ole sen objektin kanssa missään tekemisissä
             sounds.clear()
             volumeList.clear()
             soundscapeNameInput.text!!.clear()
@@ -128,6 +128,10 @@ class AddSoundFragment : Fragment() {
     }
 
     companion object {
+        /**
+         * creates new instance of the fragment
+         * @see AddSoundFragment
+         */
         fun newInstance(soundList: ArrayList<DemoApi.Model.Sound>): AddSoundFragment {
             val args = Bundle()
             args.putSerializable("key", soundList)
@@ -168,6 +172,10 @@ class AddSoundFragment : Fragment() {
             playSoundscape(sounds, volumeList)
         }
 
+        /**
+         * fab sends the user into another fragment to add new sounds to the soundscape
+         * @see CategorySearchFragment
+         */
         fab.setOnClickListener {
             activity?.supportFragmentManager
                 ?.beginTransaction()
@@ -176,19 +184,25 @@ class AddSoundFragment : Fragment() {
                 ?.commit()
         }
         viewModel.liveSounds.value = sounds
-        Log.d("wee", viewModel.liveSounds.value.toString())
         soundList.apply {
             layoutManager = LinearLayoutManager(activity)
         }
-
+        /**
+         * makes an observer that when called gets a list of sounds and puts it on recyclerview
+         */
         val nameObserver = Observer<MutableList<DemoApi.Model.Sound>> { sounds ->
             soundList.adapter = MySoundsRecyclerAdapter(sounds)
         }
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        /**
+         * observes livedata
+         */
         viewModel.liveSounds.observe(viewLifecycleOwner, nameObserver)
         volumeList = ArrayList<Float>()
 
         //overrides back button function to go back to navigatorfragment instead of breaking the adding cycle
+        /**
+         * overrides back button
+         */
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent(activity, MainActivity::class.java)
@@ -198,6 +212,10 @@ class AddSoundFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
+    /**
+     * Recyclerviews adapter
+     * @param mySounds list of sounds
+     */
     internal inner class MySoundsRecyclerAdapter(var mySounds: MutableList<DemoApi.Model.Sound>) :
         RecyclerView.Adapter<MySoundsRecyclerAdapter.ViewHolder>() {
 
@@ -209,10 +227,17 @@ class AddSoundFragment : Fragment() {
             private val removeButton: Button = view.soundRemoveButton
             private val slider: Slider = view.volumeSlider
 
+            /**
+             * initializes all things inside single item view in recyclerview
+             * @param sound a single sound object
+             * @param action onClick action
+             */
             fun initialize(sound: DemoApi.Model.Sound, action: OnClipSelected) {
 
                 volumeList.add(0.8F)
-
+                /**
+                 * for each sound object show the objects image in an imageview
+                 */
                 val uri = URL(sound.images.waveform_m)
                 lifecycleScope.launch {
                     showImg(getImage(uri), soundImage)
@@ -230,7 +255,9 @@ class AddSoundFragment : Fragment() {
                     volumeList.removeAt(adapterPosition)
                     sounds.removeAt(adapterPosition)
                 }
-
+                /**
+                 * slider for changing the volume of a single sound item
+                 */
                 slider.addOnChangeListener { _, value, _ ->
                     Log.d(TAG, "Volume changed to: $value")
                     volumeList[adapterPosition] = value
@@ -243,35 +270,46 @@ class AddSoundFragment : Fragment() {
                 .inflate(R.layout.sound_list_item, parent, false)
             return ViewHolder(view)
         }
-
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val result = mySounds[position]
             holder.initialize(result, listener)
         }
-
         override fun getItemCount() = mySounds.count()
 
+        /**
+         * makes a bitmap image out of images URL
+         * @param url
+         */
         private suspend fun getImage(url: URL) = withContext(Dispatchers.IO) {
             val allText = url.openStream()
             val decodeStream = BitmapFactory.decodeStream(allText)
 
             return@withContext decodeStream
         }
-
+        //shows image in a given imageview
+        /**
+         * shows an image in a given imageview
+         * @param i bitmap
+         * @param image imageview thats going to show the image
+         */
         private fun showImg(i: Bitmap, image: ImageView) {
             image.setImageBitmap(i)
         }
     }
 }
 
+/**
+ * class for holding livedata of sounds
+ */
 class SoundViewModel : ViewModel() {
     val liveSounds: MutableLiveData<MutableList<DemoApi.Model.Sound>> by lazy {
         MutableLiveData<MutableList<DemoApi.Model.Sound>>()
     }
 }
 
-
+/**
+ * onClick actions for recyclerview items
+ */
 interface OnClipSelected {
     fun onPlaySound(sound: DemoApi.Model.Sound, position: Int, button: Button)
-    fun onDeleteSound(sound: DemoApi.Model.Sound, position: Int)
 }

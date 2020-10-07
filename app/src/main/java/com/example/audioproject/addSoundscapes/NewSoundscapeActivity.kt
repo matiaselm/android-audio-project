@@ -13,16 +13,28 @@ import com.example.audioproject.Soundlist.sounds
 import kotlinx.coroutines.*
 import java.net.URL
 
+/**
+ * NewSoundscapeActivity holds all the functionality of the fragments in adding new soundscapes
+ */
 class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySelected,
     OnClipSelected {
     private val viewmodel = SoundViewModel()
 
     // Called on the recyclerView of fetched audio
+    /**
+     * plays a single sound from soundlist
+     * @param id id of a sound to search from freesound
+     * @param button to disable it while playing sounds so you cant play multiple sounds at the same time
+     */
     private fun playAudioFromResult(id: Int, button: Button) {
-        var result: DemoApi.Model.Sound? = null
+        var result: DemoApi.Model.Sound?
         button.isEnabled = false
 
         Log.d(Tag.TAG, "playAudio id: $id")
+        /**
+         * fetches a single sound with id from freesound
+         * @see WebServiceRepository
+         */
         lifecycleScope.launch(Dispatchers.IO) {
             result = WebServiceRepository().getSound(id.toString())
 
@@ -63,6 +75,9 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
         }
     }
 
+    /**
+     * oncreate sets the view as AddSoundFragment
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_soundscape)
@@ -75,14 +90,33 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
         }
     }
 
+    /**
+     * onClick method
+     * plays a single sound from a list of search results
+     * @param result a single item from a list of search results
+     * @param position position of the item on the list
+     * @param button button of recycler item position
+     * @see playAudioFromResult
+     */
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int, button: Button) {
         playAudioFromResult(result.id, button)
     }
 
+    /**
+     * onClick method
+     * gets the information of the sound from freesound with the id of the result
+     * adds the selected sound to your list of creating a soundscape
+     * @param result single search result
+     * @param position position on the list
+     */
     override fun onClickSound(result: DemoApi.Model.Result, position: Int) {
         var sound: DemoApi.Model.Sound? = null
         lifecycleScope.launch {
             runBlocking {
+                /**
+                 * freesound api returns first a list of vague information including id:s of the sounds
+                 * here we search for the actual information of the single sound item with id
+                 */
                 sound = WebServiceRepository().getSound(result.id.toString())
                 sounds.add(sound!!)
                 viewmodel.liveSounds.value = sounds
@@ -90,7 +124,9 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
             }
 
         }
-
+        /**
+         * returns back to AddSoundFragment
+         */
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.newSScontainer, AddSoundFragment.newInstance(sounds))
@@ -98,6 +134,11 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
 
     }
 
+    /**
+     * onClick method
+     * on selecting a category this starts a new fragment, resultListfragment
+     * @param result is for holding extra information for the fragment
+     */
     override fun onSelect(result: String, position: Int) {
         val resultListFragment = ResultListFragment.newInstance(result)
         supportFragmentManager
@@ -107,7 +148,13 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
             .commit()
     }
 
-
+    /**
+     * onClick method
+     * plays a single sound item
+     * @param sound
+     * @param position
+     * @param button
+     */
     override fun onPlaySound(sound: DemoApi.Model.Sound, position: Int, button: Button) {
         button.isEnabled = false
         lifecycleScope.launch(Dispatchers.IO) {
@@ -123,7 +170,9 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
                             .setUsage(AudioAttributes.USAGE_MEDIA)
                             .build()
                     )
-
+                    /**
+                     * onCompletionlistener called when sound has finished playing
+                     */
                     setOnCompletionListener {
                         button.isEnabled = true
                         Toast.makeText(
@@ -140,13 +189,5 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
 
             play.await()
         }
-    }
-
-    override fun onDeleteSound(sound: DemoApi.Model.Sound, position: Int) {
-        Log.d("onDelete", "onDelete called")
-        Log.d("onDelete", viewmodel.liveSounds.value.toString())
-        sounds.remove(sound)
-        viewmodel.liveSounds.value = sounds
-        Log.d("onDelete", viewmodel.liveSounds.value.toString())
     }
 }

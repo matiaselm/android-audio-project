@@ -109,7 +109,7 @@ data class Previews(
     val service = retrofit.create(Service::class.java)
 }
 
-class WebServiceRepository() {
+class WebServiceRepository {
     private val call = DemoApi.service
 
     // call this to start a GET request in mainactivity, takes in a search word, the api key token is constant
