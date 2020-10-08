@@ -48,7 +48,9 @@
             android:id="@+id/saveSoundscapeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="4dp"
             android:text="@string/save" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -63,7 +65,9 @@
             android:id="@+id/playSoundscapeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="4dp"
             android:text="@string/play" />
 
     </LinearLayout>
