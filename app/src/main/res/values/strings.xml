@@ -19,10 +19,10 @@
     <string name="all_sounds">all sounds</string>
     <string name="my_soundscapes">my soundscapes</string>
 
-    <!-- activity names -->
-    <string name="activity_add_soundscape">new soundscape</string>
-    <string name="activity_all_sounds">all sounds</string>
-    <string name="activity_my_soundscapes">my soundscapes</string>
+    <!-- activity names for toolbar -->
+    <string name="activity_add_soundscape">New Soundscape</string>
+    <string name="activity_all_sounds">All Sounds</string>
+    <string name="activity_my_soundscapes">My Soundscapes</string>
 
     <!-- Info on soundscape-items -->
     <string name="soundscape_size">Sounds: </string>
