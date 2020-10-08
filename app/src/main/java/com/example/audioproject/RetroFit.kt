@@ -22,10 +22,15 @@ import java.net.URL
 
 object DemoApi {
     private const val URL = "https://freesound.org/"
-    //token is from registering in freesound.org
+
+    /**
+     * Token for freesound.org API
+     */
     const val token = "TwC9eGABRWKuCNfmh7L0fd0mZbJSX0TlnXTu1NzX"
 
-    //data structure from json
+    /**
+     * Model for getting an object out of retrofit fetch result
+     */
     object Model {
         data class Search(
             val count: Int,
@@ -59,21 +64,12 @@ data class Previews(
     val preview_hq_mp3: String,
 
 ) : Serializable
-
-/*        data class Sound(
-            val id: Int,
-            val name: String,
-            val username: String,
-            val url: URL,
-            val tags: List<String>,
-            val previews: List<URL>
-        )
-        */
-
     }
-
+/**
+ * retrofit get calls with both text search query and getting more data on a single id
+ */
     interface Service {
-        //get api call with text search, might have to change this
+
 
         //TODO limit search results
         @GET("apiv2/search/text/")
@@ -90,9 +86,9 @@ data class Previews(
         ): Model.Sound
     }
 
-    // logginginterceptor and okHttpClient Log the api call in Logcat
-    // you can easily see from which url youre trying to get data from
-    // google setLevel method to get more or less data from apicall
+    /**
+     * logginginterceptor and okHttpClient Log the api call in Logcat
+     */
     private val loggingInterceptor: HttpLoggingInterceptor =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
@@ -100,7 +96,6 @@ data class Previews(
         .addInterceptor(loggingInterceptor)
         .build()
 
-    // Http client put to retrofit builder as client
     private val retrofit = Retrofit.Builder()
         .baseUrl(URL)
         .addConverterFactory(GsonConverterFactory.create())
@@ -109,10 +104,17 @@ data class Previews(
     val service = retrofit.create(Service::class.java)
 }
 
-class WebServiceRepository() {
+/**
+ * WebServiceRepository holds the methods for searching with retrofit
+ */
+class WebServiceRepository {
     private val call = DemoApi.service
 
-    // call this to start a GET request in mainactivity, takes in a search word, the api key token is constant
+    /**
+     * getSounds fetches sounds from freesound with a search word and filters the result into a single user
+     * @param query search word
+     * @return
+     */
     suspend fun getSounds(query: String): DemoApi.Model.Search? {
         return try {
             call.getSounds(query, "username:Ambientsoundapp", DemoApi.token)
@@ -122,7 +124,11 @@ class WebServiceRepository() {
         }
     }
 
-    // call this to start a GET request in mainactivity, takes in id of sound_list_item
+    /**
+     * gets more information on a single sound result with id
+     * @param id
+     * @return
+     */
     suspend fun getSound(id: String): DemoApi.Model.Sound? {
         return try {
             call.getSound(id, DemoApi.token)
@@ -133,17 +139,15 @@ class WebServiceRepository() {
     }
 }
 
+/**
+ * ViewModel for holding livedata from the GET queries
+ */
 class MainViewModel : ViewModel() {
     private val repository: WebServiceRepository = WebServiceRepository()
-
-    // query is livedata of strings so when you change the search word it will call new get request
     val query = MutableLiveData<String>()
     fun queryWithText(text: String) {
         query.value = text
     }
-
-    // switchmap function turns the thing inside into a livedata, in this case repository.getSounds(it) which returns a
-    // DemoApi.Model.Search object
     val results = query.switchMap {
         liveData(Dispatchers.IO) {
             emit(repository.getSounds(it))

@@ -22,14 +22,12 @@ import kotlinx.coroutines.launch
 import java.net.URL
 
 class MainActivity : AppCompatActivity(){
-    lateinit var appBarConfiguration: AppBarConfiguration
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    /*    val navController = findNavController(R.id.nav_controller_view_tag)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-*/
+        /**
+         * gets saved data from shared preferences when the application starts
+         */
         val sharedPref = this.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
         val value = sharedPref.getString(Tag.TAG, "null")
         Log.d("sharedpref", value!!)
@@ -37,7 +35,10 @@ class MainActivity : AppCompatActivity(){
         if(ss != null) {
             Soundscapes.soundscapes = ss
         }
-
+        /**
+         * fills container with navigatorFragment
+         * @see NavigatorFragment
+         */
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -45,17 +46,5 @@ class MainActivity : AppCompatActivity(){
                 .commit()
         }
     }
-/*
-    override fun onSupportNavigateUp(): Boolean {
 
-        // Handle the back button event and return true to override
-        // the default behavior the same way as the OnBackPressedCallback.
-        // TODO(reason: handle custom back behavior here if desired.)
-
-        // If no custom behavior was handled perform the default action.
-        val navController = findNavController(R.id.nav_controller_view_tag)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
- */
 }

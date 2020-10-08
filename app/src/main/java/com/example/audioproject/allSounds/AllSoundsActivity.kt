@@ -15,7 +15,16 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.net.URL
 
+/**
+ * activity for looking at all sounds in the app
+ */
 class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
+
+    /**
+     * fetches sounds data with id from freesound and plays it
+     * @param id id of a sound to search from freesound
+     * @param button to disable it while playing sounds so you cant play multiple sounds at the same time
+     */
     private fun playAudio(id: Int, playButton: Button) {
         var result: DemoApi.Model.Sound? = null
 
@@ -76,11 +85,13 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
                 .commit()
         }
     }
-
-    /*
-    override fun onClickResult(result: DemoApi.Model.Result, position: Int) {
-        Log.d(Tag.TAG, result.id.toString() + "add")
-    }
+    /**
+     * onclick method
+     * calls playaudio to play the given sound
+     * @see playAudio
+     * @param result has the id to search for the sound info
+     * @param playButton
+     * @param position
      */
     @ExperimentalCoroutinesApi
     override fun onClickPlay(result: DemoApi.Model.Result, position: Int, playButton: Button) {

@@ -14,6 +14,9 @@ import com.example.audioproject.allSounds.AllSoundsActivity
 import com.example.audioproject.mySoundscapes.MySoundscapesActivity
 import kotlinx.android.synthetic.main.fragment_navigator.*
 
+/**
+ * A view for navigating between NewSoundscapes, MySoundscapes and AllSounds
+ */
 class NavigatorFragment : Fragment() {
 
     companion object {

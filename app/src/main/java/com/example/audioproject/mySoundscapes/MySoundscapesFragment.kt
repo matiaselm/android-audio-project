@@ -15,11 +15,13 @@ import com.example.audioproject.Tag.TAG
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_my_soundscapes.*
 
+/**
+ * View for list of created soundscapes
+ * @see soundscapes
+ */
 class MySoundscapesFragment : Fragment() {
     private lateinit var currentContext: Context
-    private lateinit var sharedPrefs: SharedPreferences
-
-    lateinit var listener: OnSoundscapeSelected
+    private lateinit var listener: OnSoundscapeSelected
     companion object {
         fun newInstance() = MySoundscapesFragment()
     }
@@ -30,10 +32,6 @@ class MySoundscapesFragment : Fragment() {
         if (context is OnSoundscapeSelected) {
             listener = context
         }
-
-        // init sharedpreferences-instance
-        val MODE = Context.MODE_PRIVATE
-        sharedPrefs = context.getSharedPreferences(TAG, MODE)
     }
 
     override fun onCreateView(
@@ -44,12 +42,17 @@ class MySoundscapesFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_my_soundscapes, container, false)
     }
 
+    /**
+     * gets a list of soundscapes from shared preferences and puts it to a singleton list object
+     * then fills recyclerview with the list
+     * @see Soundscapes.soundscapes
+     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
-        val value = sharedPref.getString(Tag.TAG, "null")
+        val value = sharedPref.getString(TAG, "null")
         Log.d("sharedpref", value!!)
-        val ss = Gson().fromJson<SoundlistJson>(value, SoundlistJson::class.java)
+        val ss = Gson().fromJson(value, SoundlistJson::class.java)
         soundscapes = ss
         Log.d("sharedpref", ss.toString())
 

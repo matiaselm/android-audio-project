@@ -12,6 +12,9 @@ import com.example.audioproject.R
 import kotlinx.android.synthetic.main.activity_new_soundscape.*
 import kotlinx.android.synthetic.main.fragment_category_search.*
 
+/**
+ * Fragment to list categories for searching sounds
+ */
 class CategorySearchFragment : Fragment() {
     private lateinit var currentContext: Context
     lateinit var listener: OnCategorySelected

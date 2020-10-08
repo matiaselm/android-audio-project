@@ -1,19 +1,17 @@
 package com.example.audioproject.addSoundscapes
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
-import com.example.audioproject.DemoApi
 import com.example.audioproject.R
-import com.example.audioproject.Soundlist
 import kotlinx.android.synthetic.main.category_list_item.view.*
 
+/**
+ * Recyclerview adapter for showing different categories
+ */
 class CategoryRecyclerAdapter(
     items: ArrayList<String>,
     clickListener: OnCategorySelected
@@ -27,8 +25,13 @@ class CategoryRecyclerAdapter(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
-        var categoryName: TextView = itemView.categoryListItem
+       private var categoryName: TextView = itemView.categoryListItem
 
+        /**
+         * initializes all listitems of recyclerview
+         * @param result string value of a category name
+         * @param action onClick action
+         */
         fun init(action: OnCategorySelected, result: String) {
             categoryName.text = result
 
