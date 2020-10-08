@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Audio Project</string>
+    <string name="app_name">Soundscapes</string>
 
     <!-- button texts -->
     <string name="search">search</string>
@@ -15,7 +15,7 @@
     <string name="cat">cat</string>
 
     <!-- navigation button texts -->
-    <string name="add_soundscape">add new soundscape</string>
+    <string name="add_soundscape">new soundscape</string>
     <string name="all_sounds">all sounds</string>
     <string name="my_soundscapes">my soundscapes</string>
 
