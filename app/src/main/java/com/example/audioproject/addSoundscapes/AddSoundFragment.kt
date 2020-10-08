@@ -51,7 +51,7 @@ class AddSoundFragment : Fragment() {
     private fun playSoundscape(sounds: ArrayList<DemoApi.Model.Sound>, volume: ArrayList<Float>) {
         val sourceList = ArrayList<String>()
 
-        if (sourceList.isNotEmpty()) {
+        if (sounds.isNotEmpty()) {
             playSoundscapeButton.isEnabled = false
 
             for (sound in sounds) {
@@ -81,6 +81,8 @@ class AddSoundFragment : Fragment() {
                     mp.start()
                 }
             }
+        } else {
+            Toast.makeText(currentContext, getString(R.string.no_sounds), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -95,7 +97,8 @@ class AddSoundFragment : Fragment() {
 
         if (!soundscapeNameInput.text.isNullOrEmpty() && sounds.isNotEmpty()) {
             val arraySounds: ArrayList<DemoApi.Model.Sound> = sounds
-            val soundscape = Soundscape(soundscapeNameInput.text.toString(), arraySounds, volumeList)
+            val soundscape =
+                Soundscape(soundscapeNameInput.text.toString(), arraySounds, volumeList)
             soundscapes.add(soundscape)
             val prefString = Gson().toJson(soundscapes)
             val sharedPref = activity?.getSharedPreferences("pref", Context.MODE_PRIVATE) ?: return
@@ -263,13 +266,13 @@ class AddSoundFragment : Fragment() {
                     Log.d(TAG, "Volume changed to: $value")
                     volumeList[adapterPosition] = value
 
-                    if(value == 0.0f){
+                    if (value == 0.0f) {
                         icon.setImageResource(R.drawable.ic_baseline_volume_mute_24)
                     }
-                    if(value > 0.0f && value < 0.5f){
+                    if (value > 0.0f && value < 0.5f) {
                         icon.setImageResource(R.drawable.ic_baseline_volume_down_24)
                     }
-                    if(value >= 0.5f){
+                    if (value >= 0.5f) {
                         icon.setImageResource(R.drawable.ic_baseline_volume_up_24)
                     }
                 }
@@ -281,10 +284,12 @@ class AddSoundFragment : Fragment() {
                 .inflate(R.layout.sound_list_item, parent, false)
             return ViewHolder(view)
         }
+
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val result = mySounds[position]
             holder.initialize(result, listener)
         }
+
         override fun getItemCount() = mySounds.count()
 
         /**
