@@ -3,6 +3,8 @@
     <color name="colorPrimary">#222222</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorPrimaryGlass">#B2000000</color>
+    <color name="colorSecondaryGlass">#B2001F29</color>
+    <color name="colorThirdGlass">#B211001C</color>
     <color name="colorLightGlass">#80D5D5D5</color>
     <color name="colorAccent">#65D3FF</color>
     <color name="colorOnPrimaryDark">#FFFFFF</color>
