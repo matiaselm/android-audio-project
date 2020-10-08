@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="@color/brightGrey"
+    android:theme="@style/Theme.MyApp"
     android:checkable="false"
     android:clickable="false"
     android:elevation="4dp"
