@@ -34,6 +34,7 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
         setContentView(R.layout.activity_my_soundscape)
 
         toolbar.topAppBar.title = getString(R.string.activity_my_soundscapes)
+        toolbar.topAppBar.setBackgroundColor(getColor(R.color.colorThirdGlass))
 
         /**
          * fills the layout container with MysoundscapesFragment

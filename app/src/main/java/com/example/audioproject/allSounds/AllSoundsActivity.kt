@@ -83,6 +83,7 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
         setContentView(R.layout.activity_all_sounds)
 
         toolbar.topAppBar.title = getString(R.string.activity_all_sounds)
+        toolbar.topAppBar.setBackgroundColor(getColor(R.color.colorSecondaryGlass))
 
         if (savedInstanceState == null) {
             supportFragmentManager

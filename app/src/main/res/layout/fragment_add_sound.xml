@@ -22,9 +22,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
+            android:textSize="16sp"
             android:text="@string/add_sound_text"
             android:textAlignment="center"
-            android:textSize="12sp"
             android:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
