@@ -14,6 +14,8 @@ import com.example.audioproject.Soundscapes.soundscapes
 import com.example.audioproject.Tag
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_my_soundscapes.*
+import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -30,6 +32,8 @@ class MySoundscapesActivity : AppCompatActivity(), OnSoundscapeSelected {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_soundscape)
+
+        toolbar.topAppBar.title = getString(R.string.activity_my_soundscapes)
 
         /**
          * fills the layout container with MysoundscapesFragment

@@ -46,6 +46,9 @@ object Soundlist{
  */
 class SoundlistJson : ArrayList<Soundscape>()
 
+/**
+ * function used to remove ".vaw" from every sound name
+ */
 fun formatResult(result: String):String{
     return result.dropLast(4)
 }

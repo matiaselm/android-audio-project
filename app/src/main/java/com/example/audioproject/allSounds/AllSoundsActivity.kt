@@ -1,14 +1,18 @@
 package com.example.audioproject.allSounds
 
+import android.graphics.Paint
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.audioproject.*
+import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -77,6 +81,8 @@ class AllSoundsActivity : AppCompatActivity(), OnResultSelected {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_sounds)
+
+        toolbar.topAppBar.title = getString(R.string.activity_all_sounds)
 
         if (savedInstanceState == null) {
             supportFragmentManager

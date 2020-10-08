@@ -1,7 +1,7 @@
 <resources>
     <!-- Material design theme. -->
 
-    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
 
         <!--

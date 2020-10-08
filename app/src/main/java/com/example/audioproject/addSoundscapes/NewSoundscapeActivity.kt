@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.audioproject.*
 import com.example.audioproject.Soundlist.sounds
+import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 import kotlinx.coroutines.*
 import java.net.URL
 
@@ -82,6 +84,9 @@ class NewSoundscapeActivity : AppCompatActivity(), OnSoundSelected, OnCategorySe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_soundscape)
         Log.d("stuff", sounds.toString())
+
+        toolbar.topAppBar.title = getString(R.string.activity_add_soundscape)
+
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
