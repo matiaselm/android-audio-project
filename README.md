@@ -1,3 +1,3 @@
 # android-audio-project
 
-Create soundscapes using all kinds of sound-effects
+Application made to create acoustic enviroments, soundscapes by combining sound-effects recored by Metropolia audio students.
